@@ -1,6 +1,8 @@
 package com.example.forecastify.data
 
 import com.example.forecastify.BuildConfig
+import com.example.forecastify.data.network.ConnectivityInterceptor
+import com.example.forecastify.data.network.ConnectivityInterceptorImpl
 import com.example.forecastify.data.network.response.CurrentWeatherResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -22,7 +24,9 @@ interface WeatherAPI {
     fun getCurrentWeather(@Query("query") location: String): Deferred<CurrentWeatherResponse>
 
     companion object{
-        operator fun invoke(): WeatherAPI{
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ): WeatherAPI{
             val requestInterceptor = Interceptor{ chain->
                 val url = chain.request()
                     .url()
@@ -41,6 +45,7 @@ interface WeatherAPI {
 
             val okHttpClient = OkHttpClient.Builder()
                                 .addInterceptor(requestInterceptor)
+                                .addInterceptor(connectivityInterceptor)
                                 .build()
 
             return Retrofit.Builder()
