@@ -1,12 +1,15 @@
 package com.example.forecastify
 
 import android.app.Application
+import androidx.preference.PreferenceManager
 import com.example.forecastify.data.WeatherAPI
 import com.example.forecastify.data.db.WeatherDB
 import com.example.forecastify.data.network.ConnectivityInterceptor
 import com.example.forecastify.data.network.ConnectivityInterceptorImpl
 import com.example.forecastify.data.network.WeatherNetworkDataSource
 import com.example.forecastify.data.network.WeatherNetworkDataSourceImpl
+import com.example.forecastify.data.provider.UnitProvider
+import com.example.forecastify.data.provider.UnitProviderImpl
 import com.example.forecastify.data.repository.ForecastRepository
 import com.example.forecastify.data.repository.ForecastRepositoryImpl
 import com.example.forecastify.ui.weather.current.CurrentWeatherViewModelFactory
@@ -29,11 +32,13 @@ class ForecastApplication: Application(), KodeinAware {
         bind() from singleton { WeatherAPI(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
-        bind() from provider { CurrentWeatherViewModelFactory(instance()) }
+        bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
+        bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
     }
 
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
     }
 }
