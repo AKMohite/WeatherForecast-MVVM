@@ -8,6 +8,8 @@ import com.example.forecastify.data.network.ConnectivityInterceptor
 import com.example.forecastify.data.network.ConnectivityInterceptorImpl
 import com.example.forecastify.data.network.WeatherNetworkDataSource
 import com.example.forecastify.data.network.WeatherNetworkDataSourceImpl
+import com.example.forecastify.data.provider.LocationProvider
+import com.example.forecastify.data.provider.LocationProviderImpl
 import com.example.forecastify.data.provider.UnitProvider
 import com.example.forecastify.data.provider.UnitProviderImpl
 import com.example.forecastify.data.repository.ForecastRepository
@@ -28,10 +30,12 @@ class ForecastApplication: Application(), KodeinAware {
 
         bind() from singleton { WeatherDB(instance()) }
         bind() from singleton { instance<WeatherDB>().currentWeatherDAO() }
+        bind() from singleton { instance<WeatherDB>().weatherLocationDAO() }
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
         bind() from singleton { WeatherAPI(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
-        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
+        bind<LocationProvider>() with singleton { LocationProviderImpl() }
+        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance()) }
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
     }

@@ -3,16 +3,18 @@ package com.example.forecastify.data.db
 import android.content.Context
 import androidx.room.*
 import com.example.forecastify.data.db.entity.CurrentWeatherEntry
+import com.example.forecastify.data.db.entity.WeatherLocationEntry
 import com.example.forecastify.utils.RoomListStringConverter
 
 @Database(
-    entities = [CurrentWeatherEntry::class],
+    entities = [CurrentWeatherEntry::class, WeatherLocationEntry::class],
     version = 1
 )
 @TypeConverters(RoomListStringConverter::class)
 abstract class WeatherDB: RoomDatabase() {
 
     abstract fun currentWeatherDAO(): CurrentWeatherDao
+    abstract fun weatherLocationDAO(): WeatherLocationDao
 
     companion object{
         @Volatile private var instance: WeatherDB? = null
