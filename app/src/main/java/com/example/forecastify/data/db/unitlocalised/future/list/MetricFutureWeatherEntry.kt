@@ -1,9 +1,10 @@
-package com.example.forecastify.data.db.unitlocalised.future
+package com.example.forecastify.data.db.unitlocalised.future.list
 
 import androidx.room.ColumnInfo
+import com.example.forecastify.data.db.unitlocalised.future.list.UnitSpecificFutureEntry
 import org.threeten.bp.LocalDate
 
-class ImperialFutureWeatherEntry(
+class MetricFutureWeatherEntry(
     @ColumnInfo(name = "date")
     override val date: LocalDate,
     @ColumnInfo(name = "avgtemp")

@@ -1,8 +1,8 @@
 package com.example.forecastify.ui.weather.future.list
 
 import com.example.forecastify.R
-import com.example.forecastify.data.db.unitlocalised.future.MetricFutureWeatherEntry
-import com.example.forecastify.data.db.unitlocalised.future.UnitSpecificFutureEntry
+import com.example.forecastify.data.db.unitlocalised.future.list.MetricFutureWeatherEntry
+import com.example.forecastify.data.db.unitlocalised.future.list.UnitSpecificFutureEntry
 import com.example.forecastify.internal.glide.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder

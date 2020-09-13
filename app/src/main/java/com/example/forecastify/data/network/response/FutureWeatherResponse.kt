@@ -57,13 +57,13 @@ data class Hourly(
     val feelslike: Int,
     val heatindex: Int,
     val humidity: Int,
-    val precip: Int,
+    val precip: Double,
     val pressure: Int,
     val temperature: Int,
     val time: String,
     @SerializedName("uv_index")
     val uvIndex: Int,
-    val visibility: Int,
+    val visibility: Double,
     @SerializedName("weather_code")
     val weatherCode: Int,
     @SerializedName("weather_descriptions")
@@ -75,7 +75,7 @@ data class Hourly(
     @SerializedName("wind_dir")
     val windDir: String,
     @SerializedName("wind_speed")
-    val windSpeed: Int,
+    val windSpeed: Double,
     val windchill: Int,
     val windgust: Int
 )

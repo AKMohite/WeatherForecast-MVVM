@@ -7,7 +7,8 @@ import com.example.forecastify.data.db.WeatherLocationDao
 import com.example.forecastify.data.db.entity.FutureWeatherEntry
 import com.example.forecastify.data.db.entity.WeatherLocationEntry
 import com.example.forecastify.data.db.unitlocalised.current.UnitSpecificCurrentEntry
-import com.example.forecastify.data.db.unitlocalised.future.UnitSpecificFutureEntry
+import com.example.forecastify.data.db.unitlocalised.future.detail.UnitDetailFutureWeatherEntry
+import com.example.forecastify.data.db.unitlocalised.future.list.UnitSpecificFutureEntry
 import com.example.forecastify.data.network.FORECAST_DAYS_COUNT
 import com.example.forecastify.data.network.WeatherNetworkDataSource
 import com.example.forecastify.data.network.response.CurrentWeatherResponse
@@ -65,11 +66,24 @@ class ForecastRepositoryImpl(
     ): LiveData<out List<UnitSpecificFutureEntry>> {
         return withContext(Dispatchers.IO){
             initWeatherData()
-            val count = futureWeatherDao.countFutureWeather(startDate)
+//            val count = futureWeatherDao.countFutureWeather(startDate)
             return@withContext if(metric)
                 futureWeatherDao.getWeatherForecastMetric(startDate)
             else
                 futureWeatherDao.getWeatherForecastImperial(startDate)
+        }
+    }
+
+    override suspend fun getFutureWeatherByDate(
+        date: LocalDate,
+        metric: Boolean
+    ): LiveData<out UnitDetailFutureWeatherEntry> {
+        return withContext(Dispatchers.IO){
+            initWeatherData()
+            return@withContext if(metric)
+                futureWeatherDao.getDetailedWeatherByDateMetric(date)
+            else
+                futureWeatherDao.getDetailedWeatherByDateImperial(date)
         }
     }
 
@@ -143,7 +157,10 @@ class ForecastRepositoryImpl(
             totalsnow= it.totalsnow,
             uvIndex= it.uvIndex,
             conditionIconUrl = it?.hourly?.get(0)?.weatherIcons?.get(0),
-            conditionText = it?.hourly?.get(0)?.weatherDescriptions?.joinToString(", ")
+            conditionText = it?.hourly?.get(0)?.weatherDescriptions?.joinToString(", "),
+            avgvisMiles = it?.hourly?.get(0).visibility,
+            maxWindSpeed = it?.hourly?.get(0).windSpeed,
+            precip = it?.hourly?.get(0).precip
         )
     }
 

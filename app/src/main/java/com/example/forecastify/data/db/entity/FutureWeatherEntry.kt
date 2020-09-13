@@ -22,6 +22,9 @@ data class FutureWeatherEntry(
     val mintemp: Int,
     val sunhour: Double,
     val totalsnow: Int,
+    val maxWindSpeed: Double,
+    val precip: Double,
+    val avgvisMiles: Double,
     val conditionIconUrl: String,
     val conditionText: String,
     @SerializedName("uv_index")

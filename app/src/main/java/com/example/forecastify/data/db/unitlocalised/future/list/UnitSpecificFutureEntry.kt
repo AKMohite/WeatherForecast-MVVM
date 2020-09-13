@@ -1,4 +1,4 @@
-package com.example.forecastify.data.db.unitlocalised.future
+package com.example.forecastify.data.db.unitlocalised.future.list
 
 import org.threeten.bp.LocalDate
 
