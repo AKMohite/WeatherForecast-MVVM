@@ -16,6 +16,7 @@ import com.example.forecastify.data.provider.UnitProviderImpl
 import com.example.forecastify.data.repository.ForecastRepository
 import com.example.forecastify.data.repository.ForecastRepositoryImpl
 import com.example.forecastify.ui.weather.current.CurrentWeatherViewModelFactory
+import com.example.forecastify.ui.weather.future.list.FutureListWeatherViewModelFactory
 import com.google.android.gms.location.LocationServices
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
@@ -33,14 +34,16 @@ class ForecastApplication: Application(), KodeinAware {
         bind() from singleton { WeatherDB(instance()) }
         bind() from singleton { instance<WeatherDB>().currentWeatherDAO() }
         bind() from singleton { instance<WeatherDB>().weatherLocationDAO() }
+        bind() from singleton { instance<WeatherDB>().futureWeatherDAO() }
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
         bind() from singleton { WeatherAPI(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind() from provider { LocationServices.getFusedLocationProviderClient(instance<Context>()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance(), instance()) }
-        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance()) }
+        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance(), instance()) }
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
+        bind() from provider { FutureListWeatherViewModelFactory(instance(), instance()) }
     }
 
     override fun onCreate() {

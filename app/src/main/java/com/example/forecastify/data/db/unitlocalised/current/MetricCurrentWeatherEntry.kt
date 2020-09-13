@@ -1,10 +1,10 @@
-package com.example.forecastify.data.db.unitlocalised
+package com.example.forecastify.data.db.unitlocalised.current
 
 import androidx.room.ColumnInfo
 import androidx.room.TypeConverters
 import com.example.forecastify.utils.RoomListStringConverter
 
-class ImperialCurrentWeatherEntry(
+class MetricCurrentWeatherEntry(
     @ColumnInfo(name="temperature")
     override val temperature: Double,
     @ColumnInfo(name="weatherDescriptions")
@@ -23,5 +23,5 @@ class ImperialCurrentWeatherEntry(
     override val feelslike: Double,
     @ColumnInfo(name="visibility")
     override val visibility: Double
-) : UnitSpecificEntry{
+): UnitSpecificCurrentEntry {
 }

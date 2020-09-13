@@ -4,6 +4,7 @@ import com.example.forecastify.BuildConfig
 import com.example.forecastify.data.network.ConnectivityInterceptor
 import com.example.forecastify.data.network.ConnectivityInterceptorImpl
 import com.example.forecastify.data.network.response.CurrentWeatherResponse
+import com.example.forecastify.data.network.response.FutureWeatherResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -21,7 +22,15 @@ interface WeatherAPI {
 //    todo change default language we have to check
 
     @GET("current")
-    fun getCurrentWeather(@Query("query") location: String): Deferred<CurrentWeatherResponse>
+    fun getCurrentWeather(
+        @Query("query") location: String
+    ): Deferred<CurrentWeatherResponse>
+
+    @GET("forecast")
+    fun getFutureWeather(
+        @Query("query") location: String,
+        @Query("forecast_days") days: Int
+    ): Deferred<FutureWeatherResponse>
 
     companion object{
         operator fun invoke(
