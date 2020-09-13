@@ -1,6 +1,7 @@
 package com.example.forecastify
 
 import android.app.Application
+import android.content.Context
 import androidx.preference.PreferenceManager
 import com.example.forecastify.data.WeatherAPI
 import com.example.forecastify.data.db.WeatherDB
@@ -15,6 +16,7 @@ import com.example.forecastify.data.provider.UnitProviderImpl
 import com.example.forecastify.data.repository.ForecastRepository
 import com.example.forecastify.data.repository.ForecastRepositoryImpl
 import com.example.forecastify.ui.weather.current.CurrentWeatherViewModelFactory
+import com.google.android.gms.location.LocationServices
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -34,7 +36,8 @@ class ForecastApplication: Application(), KodeinAware {
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
         bind() from singleton { WeatherAPI(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
-        bind<LocationProvider>() with singleton { LocationProviderImpl() }
+        bind() from provider { LocationServices.getFusedLocationProviderClient(instance<Context>()) }
+        bind<LocationProvider>() with singleton { LocationProviderImpl(instance(), instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance()) }
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
