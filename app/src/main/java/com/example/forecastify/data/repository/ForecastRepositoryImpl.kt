@@ -65,6 +65,7 @@ class ForecastRepositoryImpl(
     ): LiveData<out List<UnitSpecificFutureEntry>> {
         return withContext(Dispatchers.IO){
             initWeatherData()
+            val count = futureWeatherDao.countFutureWeather(startDate)
             return@withContext if(metric)
                 futureWeatherDao.getWeatherForecastMetric(startDate)
             else
@@ -124,20 +125,18 @@ class ForecastRepositoryImpl(
         GlobalScope.launch(Dispatchers.IO) {
             deleteOldForecastData()
             val futureWeatherList = ArrayList(fetchedWeather.forecastContainer.values)
-            val futureList: ArrayList<FutureWeatherEntry> = ArrayList()
-            futureWeatherList.forEach {
-                futureList.add(mapEntity(it))
+            futureWeatherList.forEachIndexed { index, futureWeatherInfo ->
+                futureWeatherDao.insert(mapEntity(index, futureWeatherInfo))
             }
-            futureWeatherDao.insert(futureList)
             weatherLocationDao.upsert(fetchedWeather.location)
         }
     }
 
-    private fun mapEntity(it: FutureWeatherInfo): FutureWeatherEntry {
+    private fun mapEntity(index: Int, it: FutureWeatherInfo): FutureWeatherEntry {
         return FutureWeatherEntry(
-            astro = it.astro,
+//            astro = it.astro,
             avgtemp = it.avgtemp,
-            date = it.date,
+            date = LocalDate.now().plusDays((index + 1).toLong()).toString(), // todo dummy date set
             maxtemp= it.maxtemp,
             mintemp= it.mintemp,
             sunhour= it.sunhour,

@@ -1,9 +1,6 @@
 package com.example.forecastify.data.network.response
 
 
-import androidx.room.Entity
-import androidx.room.Index
-import com.example.forecastify.data.db.entity.FutureWeatherEntry
 import com.example.forecastify.data.db.entity.WeatherLocationEntry
 import com.google.gson.annotations.SerializedName
 

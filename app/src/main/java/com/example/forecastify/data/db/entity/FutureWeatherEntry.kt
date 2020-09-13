@@ -11,8 +11,8 @@ import com.google.gson.annotations.SerializedName
 data class FutureWeatherEntry(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-    @Embedded(prefix = "astro_") // prefix the columns for astro tale
-    val astro: Astro,
+    /*@Embedded(prefix = "astro_") // prefix the columns for astro tale
+    val astro: Astro,*/
     val avgtemp: Double,
     val date: String,
 //    @SerializedName("date_epoch")

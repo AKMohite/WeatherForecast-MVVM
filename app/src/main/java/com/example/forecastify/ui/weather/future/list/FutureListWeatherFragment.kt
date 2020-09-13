@@ -42,6 +42,7 @@ class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory).get(FutureListWeatherViewModel::class.java)
+        bindUI()
     }
 
     private fun bindUI() = launch(Dispatchers.Main){
