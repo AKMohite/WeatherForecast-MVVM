@@ -35,14 +35,14 @@ jobs:
       - name: Build debug APK
         run: ./gradlew :app:assembleDebug --stacktrace
       
-      - name: Check dependency updates
-        run: ./gradlew dependencyUpdates
+#      - name: Check dependency updates
+#        run: ./gradlew dependencyUpdates
       
-      - name: Upload dependency updates report
-        uses: actions/upload-artifact@v1
-        with:
-          name: dependency-updates
-          path: build/dependencyUpdates
+#      - name: Upload dependency updates report
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: dependency-updates
+#          path: build/dependencyUpdates
       
       - name: Upload APK
         uses: actions/upload-artifact@v1
