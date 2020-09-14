@@ -20,21 +20,30 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2.3.2
+        
       - name: Setup Java JDK
         uses: actions/setup-java@v1.4.2
         with: 
           java-version: 1.8
+      
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+        
       - name: Run unit Test
         run: ./gradlew test
+      
       - name: Build debug APK
         run: ./gradlew :app:assembleDebug --stacktrace
+      
       - name: Check dependency updates
         run: ./gradlew dependencyUpdates
+      
       - name: Upload dependency updates report
         uses: actions/upload-artifact@v1
         with:
           name: dependency-updates
           path: build/dependencyUpdates
+      
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
