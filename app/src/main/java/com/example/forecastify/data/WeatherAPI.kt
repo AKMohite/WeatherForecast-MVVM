@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-const val API_KEY = BuildConfig.weather_api_key
+const val API_KEY = BuildConfig.weatherApiKey
 const val API_BASE_URL = "http://api.weatherstack.com/"
 //api.weatherstack.com/current?access_key=API_KEY&query=&language
 interface WeatherAPI {
