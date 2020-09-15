@@ -75,7 +75,7 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
             updateUv(weatherEntry.uvIndex)
 
             GlideApp.with(this@FutureDetailWeatherFragment)
-                .load("http:" + weatherEntry.conditionIconUrl)
+                .load(weatherEntry.conditionIconUrl)
                 .into(imageView_condition_icon)
         })
     }
