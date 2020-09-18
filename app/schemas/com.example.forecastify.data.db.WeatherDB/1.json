@@ -1,0 +1,335 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "8c9b50320237cc5e4c4c0169c84158ab",
+    "entities": [
+      {
+        "tableName": "current_weather",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `cloudcover` INTEGER NOT NULL, `feelslikeC` REAL NOT NULL, `feelslikeF` REAL NOT NULL, `humidity` INTEGER NOT NULL, `isDay` TEXT NOT NULL, `observationTime` TEXT NOT NULL, `precipMm` REAL NOT NULL, `precipIn` REAL NOT NULL, `pressure` INTEGER NOT NULL, `temperatureC` REAL NOT NULL, `temperatureF` REAL NOT NULL, `uvIndex` INTEGER NOT NULL, `visibilityKm` REAL NOT NULL, `visibilityMi` REAL NOT NULL, `weatherCode` INTEGER NOT NULL, `weatherDescriptions` TEXT, `weatherIcons` TEXT, `windDegree` INTEGER NOT NULL, `windDir` TEXT NOT NULL, `windSpeedKmph` REAL NOT NULL, `windSpeedMps` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cloudcover",
+            "columnName": "cloudcover",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feelslikeC",
+            "columnName": "feelslikeC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feelslikeF",
+            "columnName": "feelslikeF",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "humidity",
+            "columnName": "humidity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDay",
+            "columnName": "isDay",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observationTime",
+            "columnName": "observationTime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "precipMm",
+            "columnName": "precipMm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "precipIn",
+            "columnName": "precipIn",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pressure",
+            "columnName": "pressure",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "temperatureC",
+            "columnName": "temperatureC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "temperatureF",
+            "columnName": "temperatureF",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uvIndex",
+            "columnName": "uvIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "visibilityKm",
+            "columnName": "visibilityKm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "visibilityMi",
+            "columnName": "visibilityMi",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weatherCode",
+            "columnName": "weatherCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weatherDescriptions",
+            "columnName": "weatherDescriptions",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "weatherIcons",
+            "columnName": "weatherIcons",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "windDegree",
+            "columnName": "windDegree",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "windDir",
+            "columnName": "windDir",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "windSpeedKmph",
+            "columnName": "windSpeedKmph",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "windSpeedMps",
+            "columnName": "windSpeedMps",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "future_weather",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `avgtemp` REAL NOT NULL, `date` TEXT NOT NULL, `maxtemp` INTEGER NOT NULL, `mintemp` INTEGER NOT NULL, `sunhour` REAL NOT NULL, `totalsnow` INTEGER NOT NULL, `maxWindSpeed` REAL NOT NULL, `precip` REAL NOT NULL, `avgvisMiles` REAL NOT NULL, `conditionIconUrl` TEXT NOT NULL, `conditionText` TEXT NOT NULL, `uvIndex` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "avgtemp",
+            "columnName": "avgtemp",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxtemp",
+            "columnName": "maxtemp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mintemp",
+            "columnName": "mintemp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sunhour",
+            "columnName": "sunhour",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalsnow",
+            "columnName": "totalsnow",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxWindSpeed",
+            "columnName": "maxWindSpeed",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "precip",
+            "columnName": "precip",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avgvisMiles",
+            "columnName": "avgvisMiles",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conditionIconUrl",
+            "columnName": "conditionIconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conditionText",
+            "columnName": "conditionText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uvIndex",
+            "columnName": "uvIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_future_weather_date",
+            "unique": true,
+            "columnNames": [
+              "date"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_future_weather_date` ON `${TABLE_NAME}` (`date`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "weather_location",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `country` TEXT NOT NULL, `lat` TEXT NOT NULL, `localtime` TEXT NOT NULL, `localtimeEpoch` INTEGER NOT NULL, `lon` TEXT NOT NULL, `name` TEXT NOT NULL, `region` TEXT NOT NULL, `timezoneId` TEXT NOT NULL, `utcOffset` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localtime",
+            "columnName": "localtime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localtimeEpoch",
+            "columnName": "localtimeEpoch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "lon",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "region",
+            "columnName": "region",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timezoneId",
+            "columnName": "timezoneId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "utcOffset",
+            "columnName": "utcOffset",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c9b50320237cc5e4c4c0169c84158ab')"
+    ]
+  }
+}
