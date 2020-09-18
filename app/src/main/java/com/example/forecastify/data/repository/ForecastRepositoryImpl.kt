@@ -15,6 +15,8 @@ import com.example.forecastify.data.network.response.CurrentWeatherResponse
 import com.example.forecastify.data.network.response.FutureWeatherInfo
 import com.example.forecastify.data.network.response.FutureWeatherResponse
 import com.example.forecastify.data.provider.LocationProvider
+import com.example.forecastify.internal.UnitType
+import com.example.forecastify.internal.convertMetricToImperial
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -149,18 +151,24 @@ class ForecastRepositoryImpl(
     private fun mapEntity(index: Int, it: FutureWeatherInfo): FutureWeatherEntry {
         return FutureWeatherEntry(
 //            astro = it.astro,
-            avgtemp = it.avgtemp,
+            avgtempC = it.avgtemp,
+            avgtempF = it.avgtemp.convertMetricToImperial(UnitType.TEMPERATURE),
             date = LocalDate.now().plusDays((index + 1).toLong()).toString(), // todo dummy date set
-            maxtemp= it.maxtemp,
-            mintemp= it.mintemp,
+            maxtempC= it.maxtemp,
+            maxtempF= it.maxtemp.convertMetricToImperial(UnitType.TEMPERATURE),
+            mintempC= it.mintemp,
+            mintempF= it.mintemp.convertMetricToImperial(UnitType.TEMPERATURE),
             sunhour= it.sunhour,
             totalsnow= it.totalsnow,
             uvIndex= it.uvIndex,
             conditionIconUrl = it.hourly[0].weatherIcons[0],
             conditionText = it.hourly[0].weatherDescriptions.joinToString(", "),
-            avgvisMiles = it.hourly[0].visibility,
-            maxWindSpeed = it.hourly[0].windSpeed,
-            precip = it.hourly[0].precip
+            avgvisMilesKm = it.hourly[0].visibility,
+            avgvisMilesMi = it.hourly[0].visibility.convertMetricToImperial(UnitType.VISIBILITY),
+            maxWindSpeedKmph = it.hourly[0].windSpeed,
+            maxWindSpeedMps = it.hourly[0].windSpeed.convertMetricToImperial(UnitType.WIND_SPEED),
+            precipMm = it.hourly[0].precip,
+            precipIn = it.hourly[0].precip.convertMetricToImperial(UnitType.PRECIPITATION)
         )
     }
 

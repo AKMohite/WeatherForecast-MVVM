@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8c9b50320237cc5e4c4c0169c84158ab",
+    "identityHash": "aa2f9cc2f2cd4af12bdc870bc96979a5",
     "entities": [
       {
         "tableName": "current_weather",
@@ -152,7 +152,7 @@
       },
       {
         "tableName": "future_weather",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `avgtemp` REAL NOT NULL, `date` TEXT NOT NULL, `maxtemp` INTEGER NOT NULL, `mintemp` INTEGER NOT NULL, `sunhour` REAL NOT NULL, `totalsnow` INTEGER NOT NULL, `maxWindSpeed` REAL NOT NULL, `precip` REAL NOT NULL, `avgvisMiles` REAL NOT NULL, `conditionIconUrl` TEXT NOT NULL, `conditionText` TEXT NOT NULL, `uvIndex` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `avgtempC` REAL NOT NULL, `avgtempF` REAL NOT NULL, `date` TEXT NOT NULL, `maxtempC` REAL NOT NULL, `maxtempF` REAL NOT NULL, `mintempC` REAL NOT NULL, `mintempF` REAL NOT NULL, `sunhour` REAL NOT NULL, `totalsnow` INTEGER NOT NULL, `maxWindSpeedKmph` REAL NOT NULL, `maxWindSpeedMps` REAL NOT NULL, `precipMm` REAL NOT NULL, `precipIn` REAL NOT NULL, `avgvisMilesKm` REAL NOT NULL, `avgvisMilesMi` REAL NOT NULL, `conditionIconUrl` TEXT NOT NULL, `conditionText` TEXT NOT NULL, `uvIndex` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -161,8 +161,14 @@
             "notNull": false
           },
           {
-            "fieldPath": "avgtemp",
-            "columnName": "avgtemp",
+            "fieldPath": "avgtempC",
+            "columnName": "avgtempC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avgtempF",
+            "columnName": "avgtempF",
             "affinity": "REAL",
             "notNull": true
           },
@@ -173,15 +179,27 @@
             "notNull": true
           },
           {
-            "fieldPath": "maxtemp",
-            "columnName": "maxtemp",
-            "affinity": "INTEGER",
+            "fieldPath": "maxtempC",
+            "columnName": "maxtempC",
+            "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "mintemp",
-            "columnName": "mintemp",
-            "affinity": "INTEGER",
+            "fieldPath": "maxtempF",
+            "columnName": "maxtempF",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mintempC",
+            "columnName": "mintempC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mintempF",
+            "columnName": "mintempF",
+            "affinity": "REAL",
             "notNull": true
           },
           {
@@ -197,20 +215,38 @@
             "notNull": true
           },
           {
-            "fieldPath": "maxWindSpeed",
-            "columnName": "maxWindSpeed",
+            "fieldPath": "maxWindSpeedKmph",
+            "columnName": "maxWindSpeedKmph",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "precip",
-            "columnName": "precip",
+            "fieldPath": "maxWindSpeedMps",
+            "columnName": "maxWindSpeedMps",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "avgvisMiles",
-            "columnName": "avgvisMiles",
+            "fieldPath": "precipMm",
+            "columnName": "precipMm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "precipIn",
+            "columnName": "precipIn",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avgvisMilesKm",
+            "columnName": "avgvisMilesKm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avgvisMilesMi",
+            "columnName": "avgvisMilesMi",
             "affinity": "REAL",
             "notNull": true
           },
@@ -329,7 +365,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c9b50320237cc5e4c4c0169c84158ab')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aa2f9cc2f2cd4af12bdc870bc96979a5')"
     ]
   }
 }

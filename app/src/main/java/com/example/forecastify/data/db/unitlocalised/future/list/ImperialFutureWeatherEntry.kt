@@ -7,7 +7,7 @@ import org.threeten.bp.LocalDate
 class ImperialFutureWeatherEntry(
     @ColumnInfo(name = "date")
     override val date: LocalDate,
-    @ColumnInfo(name = "avgtemp")
+    @ColumnInfo(name = "avgtempF")
     override val avgtemp: Double,
     @ColumnInfo(name = "conditionText")
     override val conditionText: String,

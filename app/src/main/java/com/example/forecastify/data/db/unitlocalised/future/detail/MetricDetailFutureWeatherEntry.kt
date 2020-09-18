@@ -6,21 +6,21 @@ import org.threeten.bp.LocalDate
 class MetricDetailFutureWeatherEntry(
     @ColumnInfo(name = "date")
     override val date: LocalDate,
-    @ColumnInfo(name = "maxtemp")
+    @ColumnInfo(name = "maxtempC")
     override val maxtemp: Double,
-    @ColumnInfo(name = "mintemp")
+    @ColumnInfo(name = "mintempC")
     override val mintemp: Double,
-    @ColumnInfo(name = "avgtemp")
+    @ColumnInfo(name = "avgtempC")
     override val avgtemp: Double,
     @ColumnInfo(name = "conditionText")
     override val conditionText: String,
     @ColumnInfo(name = "conditionIconUrl")
     override val conditionIconUrl: String,
-    @ColumnInfo(name = "maxWindSpeed")
+    @ColumnInfo(name = "maxWindSpeedKmph")
     override val maxWindSpeed: Double,
-    @ColumnInfo(name = "precip")
+    @ColumnInfo(name = "precipMm")
     override val precip: Double,
-    @ColumnInfo(name = "avgvisMiles")
+    @ColumnInfo(name = "avgvisMilesKm")
     override val avgVisibilityDistance: Double,
     @ColumnInfo(name = "uvIndex")
     override val uvIndex: Double
