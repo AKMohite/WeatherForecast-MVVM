@@ -7,7 +7,7 @@ import org.threeten.bp.LocalDate
 class MetricFutureWeatherEntry(
     @ColumnInfo(name = "date")
     override val date: LocalDate,
-    @ColumnInfo(name = "avgtemp")
+    @ColumnInfo(name = "avgtempC")
     override val avgtemp: Double,
     @ColumnInfo(name = "conditionText")
     override val conditionText: String,

@@ -5,7 +5,7 @@ import androidx.room.TypeConverters
 import com.example.forecastify.utils.RoomListStringConverter
 
 class MetricCurrentWeatherEntry(
-    @ColumnInfo(name="temperature")
+    @ColumnInfo(name="temperatureC")
     override val temperature: Double,
     @ColumnInfo(name="weatherDescriptions")
     @TypeConverters(RoomListStringConverter::class)
@@ -15,13 +15,13 @@ class MetricCurrentWeatherEntry(
     override val weatherIcons: List<String>,
     @ColumnInfo(name="windDir")
     override val windDir: String,
-    @ColumnInfo(name="windSpeed")
+    @ColumnInfo(name="windSpeedKmph")
     override val windSpeed: Double,
-    @ColumnInfo(name="precip")
+    @ColumnInfo(name="precipMm")
     override val precip: Double,
-    @ColumnInfo(name="feelslike")
+    @ColumnInfo(name="feelslikeC")
     override val feelslike: Double,
-    @ColumnInfo(name="visibility")
+    @ColumnInfo(name="visibilityKm")
     override val visibility: Double
 ): UnitSpecificCurrentEntry {
 }

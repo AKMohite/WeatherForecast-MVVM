@@ -22,8 +22,8 @@ data class FutureWeatherInfo(
     @SerializedName("date_epoch")
     val dateEpoch: Int,
     val hourly: List<Hourly>,
-    val maxtemp: Int,
-    val mintemp: Int,
+    val maxtemp: Double,
+    val mintemp: Double,
     val sunhour: Double,
     val totalsnow: Int,
     @SerializedName("uv_index")
@@ -54,12 +54,12 @@ data class Hourly(
     val chanceofwindy: Int,
     val cloudcover: Int,
     val dewpoint: Int,
-    val feelslike: Int,
+    val feelslike: Double,
     val heatindex: Int,
     val humidity: Int,
     val precip: Double,
     val pressure: Int,
-    val temperature: Int,
+    val temperature: Double,
     val time: String,
     @SerializedName("uv_index")
     val uvIndex: Int,
