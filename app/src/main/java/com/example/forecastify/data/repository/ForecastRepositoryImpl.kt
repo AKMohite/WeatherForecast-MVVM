@@ -156,11 +156,11 @@ class ForecastRepositoryImpl(
             sunhour= it.sunhour,
             totalsnow= it.totalsnow,
             uvIndex= it.uvIndex,
-            conditionIconUrl = it?.hourly?.get(0)?.weatherIcons?.get(0),
-            conditionText = it?.hourly?.get(0)?.weatherDescriptions?.joinToString(", "),
-            avgvisMiles = it?.hourly?.get(0).visibility,
-            maxWindSpeed = it?.hourly?.get(0).windSpeed,
-            precip = it?.hourly?.get(0).precip
+            conditionIconUrl = it.hourly[0].weatherIcons[0],
+            conditionText = it.hourly[0].weatherDescriptions.joinToString(", "),
+            avgvisMiles = it.hourly[0].visibility,
+            maxWindSpeed = it.hourly[0].windSpeed,
+            precip = it.hourly[0].precip
         )
     }
 
