@@ -1,6 +1,5 @@
 package com.example.forecastify.ui.weather.future.list
 
-import androidx.lifecycle.ViewModel
 import com.example.forecastify.data.provider.UnitProvider
 import com.example.forecastify.data.repository.ForecastRepository
 import com.example.forecastify.internal.lazyDeferred

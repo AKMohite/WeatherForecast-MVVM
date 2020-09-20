@@ -1,10 +1,8 @@
 package com.example.forecastify.data.db.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.forecastify.data.network.response.Astro
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "future_weather", indices = [Index(value = ["date"], unique = true)])

@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi
 import com.example.forecastify.internal.NoInternetConnectivityException
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
 
 class ConnectivityInterceptorImpl(
     context: Context

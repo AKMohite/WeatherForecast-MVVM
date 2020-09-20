@@ -1,26 +1,17 @@
 package com.example.forecastify.ui.weather.current
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
 import com.example.forecastify.R
-import com.example.forecastify.data.WeatherAPI
-import com.example.forecastify.data.network.ConnectivityInterceptorImpl
-import com.example.forecastify.data.network.WeatherNetworkDataSourceImpl
 import com.example.forecastify.internal.glide.GlideApp
 import com.example.forecastify.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.current_weather_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.support.closestKodein
 import org.kodein.di.generic.instance
