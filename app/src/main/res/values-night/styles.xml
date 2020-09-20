@@ -10,8 +10,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-
+    
+    
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:textColorPrimary">@color/txtColorPrimary</item>
         <item name="android:textColorSecondary">@color/txtColorSecondary</item>

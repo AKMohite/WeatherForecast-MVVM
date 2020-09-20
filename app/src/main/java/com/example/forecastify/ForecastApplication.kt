@@ -2,6 +2,7 @@ package com.example.forecastify
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.example.forecastify.data.WeatherAPI
 import com.example.forecastify.data.db.WeatherDB
@@ -9,10 +10,7 @@ import com.example.forecastify.data.network.ConnectivityInterceptor
 import com.example.forecastify.data.network.ConnectivityInterceptorImpl
 import com.example.forecastify.data.network.WeatherNetworkDataSource
 import com.example.forecastify.data.network.WeatherNetworkDataSourceImpl
-import com.example.forecastify.data.provider.LocationProvider
-import com.example.forecastify.data.provider.LocationProviderImpl
-import com.example.forecastify.data.provider.UnitProvider
-import com.example.forecastify.data.provider.UnitProviderImpl
+import com.example.forecastify.data.provider.*
 import com.example.forecastify.data.repository.ForecastRepository
 import com.example.forecastify.data.repository.ForecastRepositoryImpl
 import com.example.forecastify.ui.weather.current.CurrentWeatherViewModelFactory
@@ -39,6 +37,7 @@ class ForecastApplication: Application(), KodeinAware {
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind() from provider { LocationServices.getFusedLocationProviderClient(instance<Context>()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance(), instance()) }
+        bind<ThemeProvider>() with singleton { ThemeProviderImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance(), instance()) }
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
@@ -50,5 +49,8 @@ class ForecastApplication: Application(), KodeinAware {
         super.onCreate()
         AndroidThreeTen.init(this)
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
+        val themeProvider :ThemeProvider by instance()
+        val theme = themeProvider.getThemeFromPreferences()
+        AppCompatDelegate.setDefaultNightMode(theme)
     }
 }

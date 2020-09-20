@@ -2,7 +2,6 @@ package com.example.forecastify.data
 
 import com.example.forecastify.BuildConfig
 import com.example.forecastify.data.network.ConnectivityInterceptor
-import com.example.forecastify.data.network.ConnectivityInterceptorImpl
 import com.example.forecastify.data.network.response.CurrentWeatherResponse
 import com.example.forecastify.data.network.response.FutureWeatherResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
