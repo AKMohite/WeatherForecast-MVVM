@@ -55,7 +55,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             updateDateToday()
             it.apply {
                 updateTemperatures(temperature, feelslike)
-                updateCondition(weatherDescriptions.joinToString(" ")) //todo hande description
+                updateCondition(weatherDescriptions.joinToString(" ")) //todo handle description
                 updatePrecipitation(precip)
                 updateWind(windDir, windSpeed)
                 updateVisibility(visibility)
@@ -84,25 +84,25 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
     }
 
     private fun updateTemperatures(temperature: Double, feelsLike: Double){
-        val unitAbbreviation = chooseLocalisedUnitAbbreviation("°C", "°F") // todo not converted and saved
+        val unitAbbreviation = chooseLocalisedUnitAbbreviation("°C", "°F")
         textView_temperature.text = "$temperature$unitAbbreviation"
         textView_feels_like_temperature.text = "Feels like $feelsLike$unitAbbreviation"
     }
 
     private fun updatePrecipitation(precipitation: Double){
-        val unitAbbreviation = chooseLocalisedUnitAbbreviation("mm", "in") // todo not converted and saved
+        val unitAbbreviation = chooseLocalisedUnitAbbreviation("mm", "in")
         textView_precipitation.text = "Precipitation: $precipitation $unitAbbreviation"
 
     }
 
     private fun updateWind(windDirection: String, windSpeed: Double){
-        val unitAbbreviation = chooseLocalisedUnitAbbreviation("kmph", "mph") // todo not converted and saved
+        val unitAbbreviation = chooseLocalisedUnitAbbreviation("kmph", "mph")
         textView_wind.text = "Wind: $windDirection $windSpeed $unitAbbreviation"
 
     }
 
     private fun updateVisibility(visibilityDistance: Double){
-        val unitAbbreviation = chooseLocalisedUnitAbbreviation("km", "mi") // todo not converted and saved
+        val unitAbbreviation = chooseLocalisedUnitAbbreviation("km", "mi")
         textView_visibility.text = "Visibility: $visibilityDistance $unitAbbreviation"
 
     }

@@ -13,7 +13,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.delay
 
 
-const val FORECAST_DAYS_COUNT = 1 // todo change to request no of days
+const val FORECAST_DAYS_COUNT = 7 // change to request no of days
 class WeatherNetworkDataSourceImpl(
     private val apiWeatherService: WeatherAPI
 ) : WeatherNetworkDataSource {
