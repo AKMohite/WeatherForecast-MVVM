@@ -144,7 +144,7 @@ class ForecastRepositoryImpl(
             futureWeatherList.forEachIndexed { index, futureWeatherInfo ->
                 futureWeatherDao.insert(mapEntity(index, futureWeatherInfo))
             }
-            weatherLocationDao.upsert(fetchedWeather.location)
+            weatherLocationDao.upsert(fetchedWeather.location) // todo uncomment this and mocked response for release version
         }
     }
 
