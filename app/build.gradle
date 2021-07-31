@@ -94,6 +94,9 @@ dependencies {
 
     implementation Libs.coroutinesAdapter
 
+    implementation Libs.hiltAndroid
+    kapt Libs.hiltCompiler
+
 
     testImplementation TestLibs.junit
     androidTestImplementation TestLibs.junitExt

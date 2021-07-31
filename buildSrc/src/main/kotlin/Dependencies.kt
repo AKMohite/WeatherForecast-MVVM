@@ -19,6 +19,7 @@ object Versions {
     const val glide = "4.12.0"
     const val preference = "1.1.1"
     const val groupie = "2.1.0"
+    const val hilt = "2.28-alpha"
 
     /* test */
     const val junit = "4.13.2"
@@ -26,6 +27,7 @@ object Versions {
 
 object Libs {
     const val gradlePlugin = "com.android.tools.build:gradle:${Versions.gradle}"
+    const val hiltGradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
     const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
@@ -57,6 +59,8 @@ object Libs {
     const val location = "com.google.android.gms:play-services-location:18.0.0"
     const val material = "com.google.android.material:material:1.4.0"
     const val dependencyUpdate = "com.github.ben-manes:gradle-versions-plugin:0.39.0"
+    const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
+    const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.hilt}"
 
 
 }
