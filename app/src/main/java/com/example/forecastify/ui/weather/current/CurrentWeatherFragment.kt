@@ -10,17 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.forecastify.R
 import com.example.forecastify.internal.glide.GlideApp
 import com.example.forecastify.ui.base.ScopedFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.support.closestKodein
-import org.kodein.di.generic.instance
 
-class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
+@AndroidEntryPoint
+class CurrentWeatherFragment : ScopedFragment(){
 
-    override val kodein by closestKodein()
-
-    private val viewModelFactory: CurrentWeatherViewModelFactory by instance()
+//    todo remove
+    lateinit var viewModelFactory: CurrentWeatherViewModelFactory
 
     private lateinit var viewModel: CurrentWeatherViewModel
 
@@ -43,12 +41,12 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@CurrentWeatherFragment, Observer { location ->
+        weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if(location == null) return@Observer
             updateLocation(location.name)
         })
 
-        currentWeather.observe(this@CurrentWeatherFragment, Observer {
+        currentWeather.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
 
             group_loading.visibility = View.GONE

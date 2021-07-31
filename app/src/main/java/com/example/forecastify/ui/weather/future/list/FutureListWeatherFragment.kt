@@ -15,19 +15,17 @@ import com.example.forecastify.ui.base.ScopedFragment
 import com.example.forecastify.utils.LocalDateConverter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.future_list_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.support.closestKodein
-import org.kodein.di.generic.instance
 import org.threeten.bp.LocalDate
 
-class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
+@AndroidEntryPoint
+class FutureListWeatherFragment : ScopedFragment() {
 
-    override val kodein by closestKodein()
-
-    private val viewModelFactory: FutureListWeatherViewModelFactory by instance()
+//    todo remove
+    lateinit var viewModelFactory: FutureListWeatherViewModelFactory
     private lateinit var viewModel: FutureListWeatherViewModel
 
     override fun onCreateView(
@@ -47,13 +45,13 @@ class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
         val futureWeatherEntries = viewModel.weatherEntries.await()
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@FutureListWeatherFragment, Observer {
+        weatherLocation.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
 
             updateLocation(it.name)
         })
 
-        futureWeatherEntries.observe(this@FutureListWeatherFragment, Observer {
+        futureWeatherEntries.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
 
             group_loading.visibility = View.GONE
