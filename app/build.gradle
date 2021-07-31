@@ -75,10 +75,6 @@ dependencies {
     implementation Libs.retrofit
     implementation Libs.retrofitGsonConverter
 
-//    kodein
-    implementation Libs.kodeinGeneric
-    implementation Libs.kodeinFramework
-
 //    datetime support
     implementation Libs.dateTimeSupport
 
