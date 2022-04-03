@@ -1,7 +1,8 @@
 package com.example.forecastify.data.db
 
-import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.forecastify.data.db.entity.CurrentWeatherEntry
 import com.example.forecastify.data.db.entity.FutureWeatherEntry
 import com.example.forecastify.data.db.entity.WeatherLocationEntry
@@ -19,17 +20,4 @@ abstract class WeatherDB: RoomDatabase() {
     abstract fun futureWeatherDAO(): FutureWeatherDao
     abstract fun weatherLocationDAO(): WeatherLocationDao
 
-    companion object{
-        @Volatile private var instance: WeatherDB? = null
-        private val LOCK = Any()
-
-        operator fun invoke(context: Context) = instance?: synchronized(LOCK){
-            instance ?: buildDatabase(context).also {
-                instance = it
-            }
-        }
-
-        private fun buildDatabase(context: Context) = Room.databaseBuilder(context.applicationContext, WeatherDB::class.java, "forecast.db")
-            .build()
-    }
 }

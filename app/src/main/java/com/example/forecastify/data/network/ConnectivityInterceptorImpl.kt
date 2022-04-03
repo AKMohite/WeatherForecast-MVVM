@@ -6,12 +6,12 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.forecastify.internal.NoInternetConnectivityException
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-class ConnectivityInterceptorImpl(
-    context: Context
-) : ConnectivityInterceptor {
+class ConnectivityInterceptorImpl constructor(context: Context) : ConnectivityInterceptor {
 
     private val appContext = context.applicationContext
 

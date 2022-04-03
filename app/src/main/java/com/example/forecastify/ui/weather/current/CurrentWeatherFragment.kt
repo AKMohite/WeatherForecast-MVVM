@@ -5,24 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.forecastify.R
 import com.example.forecastify.internal.glide.GlideApp
 import com.example.forecastify.ui.base.ScopedFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.support.closestKodein
-import org.kodein.di.generic.instance
 
-class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
+@AndroidEntryPoint
+class CurrentWeatherFragment : ScopedFragment(){
 
-    override val kodein by closestKodein()
-
-    private val viewModelFactory: CurrentWeatherViewModelFactory by instance()
-
-    private lateinit var viewModel: CurrentWeatherViewModel
+    private val viewModel: CurrentWeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +28,6 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(CurrentWeatherViewModel::class.java)
         bindUI()
     }
 
@@ -43,12 +36,12 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@CurrentWeatherFragment, Observer { location ->
+        weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if(location == null) return@Observer
             updateLocation(location.name)
         })
 
-        currentWeather.observe(this@CurrentWeatherFragment, Observer {
+        currentWeather.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
 
             group_loading.visibility = View.GONE

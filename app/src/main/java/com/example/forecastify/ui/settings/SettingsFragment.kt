@@ -8,15 +8,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.forecastify.R
 import com.example.forecastify.data.provider.ThemeProvider
-import com.example.forecastify.data.provider.ThemeProviderImpl
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.support.closestKodein
-import org.kodein.di.generic.instance
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class SettingsFragment: PreferenceFragmentCompat(), KodeinAware {
+@AndroidEntryPoint
+class SettingsFragment: PreferenceFragmentCompat() {
 
-    override val kodein by closestKodein()
-    private val themeProvider :ThemeProvider by instance()
+    @Inject
+    lateinit var themeProvider :ThemeProvider
     private val themePreference by lazy {
         findPreference<ListPreference>(getString(R.string.theme_preferences_key))
     }

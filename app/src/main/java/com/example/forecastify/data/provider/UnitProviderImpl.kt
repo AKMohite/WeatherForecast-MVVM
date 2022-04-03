@@ -2,10 +2,12 @@ package com.example.forecastify.data.provider
 
 import android.content.Context
 import com.example.forecastify.internal.UnitSystem
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 const val UNIT_SYSTEM = "UNIT_SYSTEM"
-class UnitProviderImpl(
-    context: Context
+class UnitProviderImpl @Inject constructor(
+    @ApplicationContext context: Context
 ) : PreferenceProvider(context), UnitProvider {
 
     override fun getUnitSystem(): UnitSystem {

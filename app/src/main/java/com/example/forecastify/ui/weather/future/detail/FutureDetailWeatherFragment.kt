@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.forecastify.R
@@ -12,24 +13,18 @@ import com.example.forecastify.internal.DateNotFoundException
 import com.example.forecastify.internal.glide.GlideApp
 import com.example.forecastify.ui.base.ScopedFragment
 import com.example.forecastify.utils.LocalDateConverter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.future_detail_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.support.closestKodein
-import org.kodein.di.generic.factory
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
-class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
+@AndroidEntryPoint
+class FutureDetailWeatherFragment : ScopedFragment() {
 
-    override val kodein by closestKodein()
-
-    private val viewModelFactoryInstanceFactory
-            : ((LocalDate) -> FutureDetailViewModelFactory) by factory()
-
-    private lateinit var viewModel: FutureDetailWeatherViewModel
+    private val viewModel: FutureDetailWeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,22 +38,20 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
         val safeArgs = arguments?.let { FutureDetailWeatherFragmentArgs.fromBundle(it) }
         val date = LocalDateConverter.stringToDate(safeArgs?.dateString) ?: throw DateNotFoundException()
 
-        viewModel = ViewModelProvider(this, viewModelFactoryInstanceFactory(date))
-            .get(FutureDetailWeatherViewModel::class.java)
-
+//        todo call detail api
+        viewModel.getDetail(date)
         bindUI()
     }
 
     private fun bindUI() = launch(Dispatchers.Main) {
-        val futureWeather = viewModel.weather.await()
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@FutureDetailWeatherFragment, Observer { location ->
+        weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if (location == null) return@Observer
             updateLocation(location.name)
         })
 
-        futureWeather.observe(this@FutureDetailWeatherFragment, Observer { weatherEntry ->
+        viewModel.weather.observe(viewLifecycleOwner, Observer { weatherEntry ->
             if (weatherEntry == null) return@Observer
 
             updateDate(weatherEntry.date)
