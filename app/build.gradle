@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: "androidx.navigation.safeargs"
 
 android {
@@ -15,9 +16,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField('String', 'weatherApiKey', WEATHER_API_KEY)
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation":
+                                     "$projectDir/schemas".toString()]
             }
         }
     }
@@ -73,7 +75,10 @@ dependencies {
 
 //    retrofit
     implementation Libs.retrofit
-    implementation Libs.retrofitGsonConverter
+    implementation Libs.loggingInterceptor
+    implementation Libs.moshi
+    implementation Libs.moshiConverter
+    kapt Libs.moshiCodegen
 
 //    datetime support
     implementation Libs.dateTimeSupport

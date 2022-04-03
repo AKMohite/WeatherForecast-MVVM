@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.forecastify.R
 import com.example.forecastify.internal.glide.GlideApp
 import com.example.forecastify.ui.base.ScopedFragment
@@ -17,10 +17,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CurrentWeatherFragment : ScopedFragment(){
 
-//    todo remove
-    lateinit var viewModelFactory: CurrentWeatherViewModelFactory
-
-    private lateinit var viewModel: CurrentWeatherViewModel
+    private val viewModel: CurrentWeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +28,6 @@ class CurrentWeatherFragment : ScopedFragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(CurrentWeatherViewModel::class.java)
         bindUI()
     }
 

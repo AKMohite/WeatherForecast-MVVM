@@ -4,8 +4,11 @@ import com.example.forecastify.data.provider.UnitProvider
 import com.example.forecastify.data.repository.ForecastRepository
 import com.example.forecastify.internal.lazyDeferred
 import com.example.forecastify.ui.base.WeatherViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CurrentWeatherViewModel(
+@HiltViewModel
+class CurrentWeatherViewModel @Inject constructor(
     private val forecastRepository: ForecastRepository,
     unitProvider: UnitProvider
 ) : WeatherViewModel(forecastRepository, unitProvider) {

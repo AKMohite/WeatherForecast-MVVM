@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.forecastify.R
@@ -25,8 +25,7 @@ import org.threeten.bp.LocalDate
 class FutureListWeatherFragment : ScopedFragment() {
 
 //    todo remove
-    lateinit var viewModelFactory: FutureListWeatherViewModelFactory
-    private lateinit var viewModel: FutureListWeatherViewModel
+    private val viewModel: FutureListWeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +36,6 @@ class FutureListWeatherFragment : ScopedFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(FutureListWeatherViewModel::class.java)
         bindUI()
     }
 

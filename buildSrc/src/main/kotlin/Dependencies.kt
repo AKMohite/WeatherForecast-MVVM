@@ -8,8 +8,8 @@ object App {
 }
 
 object Versions {
-    const val gradle = "4.1.2"
-    const val kotlin = "1.4.32"
+    const val gradle = "7.1.0"
+    const val kotlin = "1.5.10"
     const val appcompat = "1.3.1"
     const val navigation = "2.3.5"
     const val room = "2.3.0"
@@ -19,7 +19,9 @@ object Versions {
     const val glide = "4.12.0"
     const val preference = "1.1.1"
     const val groupie = "2.1.0"
-    const val hilt = "2.28-alpha"
+    const val hilt = "2.38.1"
+    const val loggingInterceptor = "4.9.0"
+    const val moshi = "1.11.0"
 
     /* test */
     const val junit = "4.13.2"
@@ -61,6 +63,10 @@ object Libs {
     const val dependencyUpdate = "com.github.ben-manes:gradle-versions-plugin:0.39.0"
     const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
     const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.hilt}"
+    const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
+    const val moshi = "com.squareup.moshi:moshi-kotlin:${Versions.moshi}"
+    const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
+    const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
 
 
 }

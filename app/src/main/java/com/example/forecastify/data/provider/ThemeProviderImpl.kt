@@ -4,9 +4,13 @@ import android.app.UiModeManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.forecastify.R
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.security.InvalidParameterException
+import javax.inject.Inject
 
-class ThemeProviderImpl(private val context: Context): PreferenceProvider(context), ThemeProvider {
+class ThemeProviderImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+): PreferenceProvider(context), ThemeProvider {
 
     override fun getThemeFromPreferences(): Int {
         val selectedTheme = preferences.getString(

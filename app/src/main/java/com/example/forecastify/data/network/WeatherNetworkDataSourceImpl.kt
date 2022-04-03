@@ -11,10 +11,11 @@ import com.example.forecastify.internal.UnitType
 import com.example.forecastify.internal.convertMetricToImperial
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
 
 const val FORECAST_DAYS_COUNT = 7 // change to request no of days
-class WeatherNetworkDataSourceImpl(
+class WeatherNetworkDataSourceImpl @Inject constructor(
     private val apiWeatherService: WeatherAPI
 ) : WeatherNetworkDataSource {
 

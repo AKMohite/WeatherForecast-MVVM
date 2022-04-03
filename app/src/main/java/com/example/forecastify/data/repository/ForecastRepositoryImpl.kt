@@ -3,6 +3,7 @@ package com.example.forecastify.data.repository
 import androidx.lifecycle.LiveData
 import com.example.forecastify.data.db.CurrentWeatherDao
 import com.example.forecastify.data.db.FutureWeatherDao
+import com.example.forecastify.data.db.WeatherDB
 import com.example.forecastify.data.db.WeatherLocationDao
 import com.example.forecastify.data.db.entity.FutureWeatherEntry
 import com.example.forecastify.data.db.entity.WeatherLocationEntry
@@ -24,15 +25,18 @@ import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZonedDateTime
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class ForecastRepositoryImpl(
-    private val currentWeatherDao: CurrentWeatherDao,
-    private val futureWeatherDao: FutureWeatherDao,
-    private val weatherLocationDao: WeatherLocationDao,
+class ForecastRepositoryImpl @Inject constructor(
+    private val weatherDB: WeatherDB,
     private val weatherNetworkDataSource: WeatherNetworkDataSource,
     private val locationProvider: LocationProvider
 ) : ForecastRepository {
+
+    private val currentWeatherDao: CurrentWeatherDao = weatherDB.currentWeatherDAO()
+    private val futureWeatherDao: FutureWeatherDao = weatherDB.futureWeatherDAO()
+    private val weatherLocationDao: WeatherLocationDao = weatherDB.weatherLocationDAO()
 
     init {
         weatherNetworkDataSource.apply {

@@ -10,13 +10,15 @@ import com.example.forecastify.data.db.entity.WeatherLocationEntry
 import com.example.forecastify.internal.LocationPermissionNotGrantedException
 import com.example.forecastify.internal.asDeferred
 import com.google.android.gms.location.FusedLocationProviderClient
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Deferred
+import javax.inject.Inject
 
 const val USE_DEVICE_LOCATION = "USE_DEVICE_LOCATION"
 const val CUSTOM_LOCATION = "CUSTOM_LOCATION"
-class LocationProviderImpl(
+class LocationProviderImpl @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    context: Context
+    @ApplicationContext context: Context
 ) : PreferenceProvider(context), LocationProvider {
 
     private val appContext = context.applicationContext

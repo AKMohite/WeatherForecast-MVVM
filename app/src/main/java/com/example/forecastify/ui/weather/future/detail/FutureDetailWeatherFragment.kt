@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.forecastify.R
@@ -23,11 +24,7 @@ import org.threeten.bp.format.FormatStyle
 @AndroidEntryPoint
 class FutureDetailWeatherFragment : ScopedFragment() {
 
-//    todo remove
-    lateinit var viewModelFactoryInstanceFactory
-            : ((LocalDate) -> FutureDetailViewModelFactory)
-
-    private lateinit var viewModel: FutureDetailWeatherViewModel
+    private val viewModel: FutureDetailWeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +38,12 @@ class FutureDetailWeatherFragment : ScopedFragment() {
         val safeArgs = arguments?.let { FutureDetailWeatherFragmentArgs.fromBundle(it) }
         val date = LocalDateConverter.stringToDate(safeArgs?.dateString) ?: throw DateNotFoundException()
 
-        viewModel = ViewModelProvider(this, viewModelFactoryInstanceFactory(date))
-            .get(FutureDetailWeatherViewModel::class.java)
-
+//        todo call detail api
+        viewModel.getDetail(date)
         bindUI()
     }
 
     private fun bindUI() = launch(Dispatchers.Main) {
-        val futureWeather = viewModel.weather.await()
         val weatherLocation = viewModel.weatherLocation.await()
 
         weatherLocation.observe(viewLifecycleOwner, Observer { location ->
@@ -56,7 +51,7 @@ class FutureDetailWeatherFragment : ScopedFragment() {
             updateLocation(location.name)
         })
 
-        futureWeather.observe(viewLifecycleOwner, Observer { weatherEntry ->
+        viewModel.weather.observe(viewLifecycleOwner, Observer { weatherEntry ->
             if (weatherEntry == null) return@Observer
 
             updateDate(weatherEntry.date)
