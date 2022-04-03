@@ -30,6 +30,21 @@ android {
         }
     }
 
+    flavorDimensions "mode"
+
+    productFlavors {
+        dev {
+            versionNameSuffix "-dev"
+            applicationIdSuffix ".dev"
+            buildConfigField "Boolean", "isDev", 'true'
+        }
+        prod {
+//            versionNameSuffix "-prod"
+//            applicationIdSuffix ".prod"
+            buildConfigField "Boolean", "isDev", 'false'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
