@@ -15,7 +15,7 @@ import retrofit2.http.Query
 interface OpenWeatherAPI {
 
     @GET("current")
-    fun getCurrentWeather(
+    suspend fun getCurrentWeather(
         @Query(QUERY_APP_ID) apiKey: String = API_KEY, // todo add api keys in interceptors
         @Query(QUERY_LATITUDE) latitude: Double,
         @Query(QUERY_LONGITUDE) longitude: Double,
@@ -24,7 +24,7 @@ interface OpenWeatherAPI {
     ): CurrentWeatherDTO
 
     @GET("forecast/daily")
-    fun getFutureWeather(
+    suspend fun getFutureWeather(
         @Query(QUERY_APP_ID) apiKey: String = API_KEY, // todo add api keys in interceptors
         @Query(QUERY_LATITUDE) latitude: Double,
         @Query(QUERY_LONGITUDE) longitude: Double,
