@@ -9,7 +9,7 @@ import com.example.forecastify.data.API_KEY
 import com.example.forecastify.data.WeatherAPI
 import com.example.forecastify.data.db.WeatherDB
 import com.example.forecastify.data.network.ConnectivityInterceptorImpl
-import com.example.forecastify.data.network.MockInterceptor
+import com.example.forecastify.data.network.ErrorInterceptor
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.squareup.moshi.Moshi
@@ -54,8 +54,8 @@ object DataModule {
 
     @Singleton
     @Provides
-    @Named("MockInterceptor")
-    fun provideMockInterceptor(): Interceptor = MockInterceptor()
+    @Named("ErrorInterceptor")
+    fun provideMockInterceptor(): Interceptor = ErrorInterceptor()
 
     @Singleton
     @Provides
@@ -69,8 +69,8 @@ object DataModule {
     fun provideCallFactory(
         @Named("LoggingInterceptor") loggingInterceptor: Interceptor,
         @Named("ConnectivityInterceptor") connectivityInterceptor: Interceptor,
-        @Named("MockInterceptor") mockInterceptor: Interceptor
-    ): Call.Factory {
+        @Named("ErrorInterceptor") errorInterceptor: Interceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(connectivityInterceptor)
             .addInterceptor { chain ->
@@ -80,8 +80,8 @@ object DataModule {
                 val request = original.newBuilder().url(url)
                 chain.proceed(request.build())
             }
+            .addInterceptor(errorInterceptor)
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(mockInterceptor)
             .build()
     }
 
