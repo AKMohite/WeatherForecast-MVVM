@@ -101,7 +101,7 @@ object DataModule {
     @Provides
     fun provideRetrofit(
         moshiConverterFactory: MoshiConverterFactory,
-        callFactory: Call.Factory
+        callFactory: OkHttpClient
     ): Retrofit.Builder = Retrofit.Builder()
         .baseUrl(API_BASE_URL)
         .callFactory(callFactory)
