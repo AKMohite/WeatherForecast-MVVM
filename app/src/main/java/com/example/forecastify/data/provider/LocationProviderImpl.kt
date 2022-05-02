@@ -13,6 +13,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject
+import kotlin.math.abs
 
 const val USE_DEVICE_LOCATION = "USE_DEVICE_LOCATION"
 const val CUSTOM_LOCATION = "CUSTOM_LOCATION"
@@ -32,18 +33,18 @@ class LocationProviderImpl @Inject constructor(
         return deviceLocationChanged || hasCustomLocationChanged(lastWeatherLocation)
     }
 
-    override suspend fun getPreferredLocationString(): String {
+    override suspend fun getPreferredLocationString(): Pair<Double, Double> {
         if (isUsingDeviceLocation()) {
             try {
                 val deviceLocation = getLastDeviceLocation().await()
-                    ?: return "${getCustomLocationName()}"
-                return "${deviceLocation.latitude},${deviceLocation.longitude}"
+                    ?: return getCustomLocationName()
+                return Pair(deviceLocation.latitude, deviceLocation.longitude)
             } catch (e: LocationPermissionNotGrantedException) {
-                return "${getCustomLocationName()}"
+                return getCustomLocationName()
             }
         }
         else
-            return "${getCustomLocationName()}"
+            return getCustomLocationName()
     }
 
     private suspend fun hasDeviceLocationChanged(lastWeatherLocation: WeatherLocationEntry): Boolean {
@@ -55,20 +56,21 @@ class LocationProviderImpl @Inject constructor(
 
         // Comparing doubles cannot be done with "=="
         val comparisonThreshold = 0.03
-        return Math.abs(deviceLocation.latitude - lastWeatherLocation.lat.toDouble()) > comparisonThreshold &&
-                Math.abs(deviceLocation.longitude - lastWeatherLocation.lon.toDouble()) > comparisonThreshold
+        return abs(deviceLocation.latitude - lastWeatherLocation.lat.toDouble()) > comparisonThreshold &&
+                abs(deviceLocation.longitude - lastWeatherLocation.lon.toDouble()) > comparisonThreshold
     }
 
     private fun hasCustomLocationChanged(lastWeatherLocation: WeatherLocationEntry): Boolean {
         if (!isUsingDeviceLocation()) {
             val customLocationName = getCustomLocationName()
-            return customLocationName != lastWeatherLocation.name
+            return customLocationName.first != lastWeatherLocation.lat.toDouble() && customLocationName.second != lastWeatherLocation.lon.toDouble()
         }
         return false
     }
 
-    private fun getCustomLocationName(): String? {
-        return preferences.getString(CUSTOM_LOCATION, null)
+    private fun getCustomLocationName(): Pair<Double, Double> {
+//        return preferences.getString(CUSTOM_LOCATION, null)
+        return Pair(19.0181129, 73.086464)
     }
 
     private fun isUsingDeviceLocation(): Boolean {

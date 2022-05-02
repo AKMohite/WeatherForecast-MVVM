@@ -9,6 +9,8 @@ import com.example.forecastify.internal.lazyDeferred
 import com.example.forecastify.ui.base.WeatherViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
@@ -23,8 +25,10 @@ class FutureDetailWeatherViewModel @Inject constructor(
     val weather: MutableLiveData<UnitDetailFutureWeatherEntry> by lazy { MutableLiveData() }
 
     fun getDetail(date: LocalDate) {
-        viewModelScope.launch(Dispatchers.IO) {
-            weather.value = forecastRepository.getFutureWeatherByDate(date, super.isMetricUnit).value
-        }
+        forecastRepository.getFutureWeatherByDate(date, super.isMetricUnit)
+            .onEach { weatherEntry ->
+                weather.value = weatherEntry
+            }
+            .launchIn(viewModelScope)
     }
 }

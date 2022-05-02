@@ -1,6 +1,5 @@
 package com.example.forecastify.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -9,6 +8,7 @@ import com.example.forecastify.data.db.entity.CURRENT_WEATHER_ID
 import com.example.forecastify.data.db.entity.CurrentWeatherEntry
 import com.example.forecastify.data.db.unitlocalised.current.ImperialCurrentWeatherEntry
 import com.example.forecastify.data.db.unitlocalised.current.MetricCurrentWeatherEntry
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrentWeatherDao {
@@ -16,8 +16,8 @@ interface CurrentWeatherDao {
     fun upsert(weatherEntry: CurrentWeatherEntry)
 
     @Query("SELECT * FROM current_weather WHERE id = $CURRENT_WEATHER_ID")
-    fun getWeatherMetric(): LiveData<MetricCurrentWeatherEntry>
+    fun getWeatherMetric(): Flow<MetricCurrentWeatherEntry>
 
     @Query("SELECT * FROM current_weather WHERE id = $CURRENT_WEATHER_ID")
-    fun getWeatherImperial(): LiveData<ImperialCurrentWeatherEntry>
+    fun getWeatherImperial(): Flow<ImperialCurrentWeatherEntry>
 }

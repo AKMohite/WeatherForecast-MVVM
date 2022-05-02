@@ -36,10 +36,10 @@ class FutureListWeatherFragment : ScopedFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindUI()
+//        bindUI()
     }
 
-    private fun bindUI() = launch(Dispatchers.Main){
+    /*private fun bindUI() = launch(Dispatchers.Main){
         val futureWeatherEntries = viewModel.weatherEntries.await()
         val weatherLocation = viewModel.weatherLocation.await()
 
@@ -57,7 +57,7 @@ class FutureListWeatherFragment : ScopedFragment() {
             updateDateToNextWeek()
             initRecyclerview(it.toFutureItems())
         })
-    }
+    }*/
 
     private fun List<UnitSpecificFutureEntry>.toFutureItems(): List<FutureWeatherItem>{
         return this.map {

@@ -1,27 +1,23 @@
 package com.example.forecastify.data.repository
 
-import androidx.lifecycle.LiveData
-import com.example.forecastify.data.db.CurrentWeatherDao
-import com.example.forecastify.data.db.FutureWeatherDao
-import com.example.forecastify.data.db.WeatherDB
-import com.example.forecastify.data.db.WeatherLocationDao
+import com.example.forecastify.data.db.OWLocalDataSource
 import com.example.forecastify.data.db.entity.FutureWeatherEntry
 import com.example.forecastify.data.db.entity.WeatherLocationEntry
 import com.example.forecastify.data.db.unitlocalised.current.UnitSpecificCurrentEntry
 import com.example.forecastify.data.db.unitlocalised.future.detail.UnitDetailFutureWeatherEntry
 import com.example.forecastify.data.db.unitlocalised.future.list.UnitSpecificFutureEntry
 import com.example.forecastify.data.network.FORECAST_DAYS_COUNT
-import com.example.forecastify.data.network.WeatherNetworkDataSource
-import com.example.forecastify.data.network.response.CurrentWeatherResponse
+import com.example.forecastify.data.network.IOWNetworkDataSource
+import com.example.forecastify.data.network.response.CurrentWeatherDTO
 import com.example.forecastify.data.network.response.FutureWeatherInfo
-import com.example.forecastify.data.network.response.FutureWeatherResponse
+import com.example.forecastify.data.network.response.WeatherForecastDTO
 import com.example.forecastify.data.provider.LocationProvider
+import com.example.forecastify.domain.WeatherConstants.OW_FUTURE_DAY_COUNT
+import com.example.forecastify.domain.WeatherConstants.OW_METRIC_TYPE
 import com.example.forecastify.internal.UnitType
 import com.example.forecastify.internal.convertMetricToImperial
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZonedDateTime
 import java.util.*
@@ -29,72 +25,56 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class ForecastRepositoryImpl @Inject constructor(
-    private val weatherDB: WeatherDB,
-    private val weatherNetworkDataSource: WeatherNetworkDataSource,
+    private val networkDataSource: IOWNetworkDataSource,
+    private val localDataSource: OWLocalDataSource,
     private val locationProvider: LocationProvider
 ) : ForecastRepository {
 
-    private val currentWeatherDao: CurrentWeatherDao = weatherDB.currentWeatherDAO()
-    private val futureWeatherDao: FutureWeatherDao = weatherDB.futureWeatherDAO()
-    private val weatherLocationDao: WeatherLocationDao = weatherDB.weatherLocationDAO()
-
-    init {
-        weatherNetworkDataSource.apply {
-            fetchedCurrentWeather.observeForever{ newCurrentWeather ->
-                persistCurrentWeather(newCurrentWeather)
-            }
-
-            fetchedFutureWeather.observeForever{ newFutureWeather ->
-                persistFutureWeather(newFutureWeather)
-            }
-        }
-    }
-
-    override suspend fun getCurrentWeather(metric: Boolean): LiveData<out UnitSpecificCurrentEntry> {
-        return withContext(Dispatchers.IO){
+    override fun getCurrentWeather(metric: Boolean): Flow<UnitSpecificCurrentEntry> {
+        return flow {
             initWeatherData()
-            return@withContext if(metric)
-                currentWeatherDao.getWeatherMetric()
+            if(metric)
+                localDataSource.getMetricCurrentWeather()
             else
-                currentWeatherDao.getWeatherImperial()
+                localDataSource.getImperialCurrentWeather()
         }
     }
 
-    override suspend fun getWeatherLocation(): LiveData<WeatherLocationEntry> {
-        return withContext(Dispatchers.IO){
-            return@withContext weatherLocationDao.getLocation()
+    override fun getWeatherLocation(): Flow<WeatherLocationEntry> {
+        return flow {
+            localDataSource.getLocation()
         }
     }
 
-    override suspend fun getFutureWeatherList(
+    override fun getFutureWeatherList(
         startDate: LocalDate,
         metric: Boolean
-    ): LiveData<out List<UnitSpecificFutureEntry>> {
-        return withContext(Dispatchers.IO){
+    ): Flow<List<UnitSpecificFutureEntry>> {
+        return flow {
             initWeatherData()
 //            val count = futureWeatherDao.countFutureWeather(startDate)
-            return@withContext if(metric)
-                futureWeatherDao.getWeatherForecastMetric(startDate)
+            if(metric)
+                localDataSource.getWeatherForecastMetric(startDate)
             else
-                futureWeatherDao.getWeatherForecastImperial(startDate)
+                localDataSource.getWeatherForecastImperial(startDate)
         }
     }
 
-    override suspend fun getFutureWeatherByDate(
+    override fun getFutureWeatherByDate(
         date: LocalDate,
         metric: Boolean
-    ): LiveData<out UnitDetailFutureWeatherEntry> {
-        return withContext(Dispatchers.IO){
+    ): Flow<UnitDetailFutureWeatherEntry> {
+        return flow {
             initWeatherData()
-            return@withContext if(metric)
-                futureWeatherDao.getDetailedWeatherByDateMetric(date)
+            if(metric)
+                localDataSource.getMetricDetailFutureWeather(date)
             else
-                futureWeatherDao.getDetailedWeatherByDateImperial(date)
+                localDataSource.getImperialDetailFutureWeather(date)
         }
     }
 
     private suspend fun initWeatherData() {
-        val lastWeatherLocation = weatherLocationDao.getLocationNonLive()
+        val lastWeatherLocation = localDataSource.getLocationNonLive()
 
         if (lastWeatherLocation == null || locationProvider.hasLocationChanged(lastWeatherLocation)){
             fetchCurrentWeather()
@@ -110,9 +90,12 @@ class ForecastRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchCurrentWeather(){
-        weatherNetworkDataSource.fetchCurrentWeather(
-            locationProvider.getPreferredLocationString(),
-            Locale.getDefault().language
+        val latLong = locationProvider.getPreferredLocationString()
+        networkDataSource.getCurrentWeather(
+            latLong.first,
+            latLong.second,
+            Locale.getDefault().language,
+            OW_METRIC_TYPE
         )
     }
     
@@ -123,34 +106,34 @@ class ForecastRepositoryImpl @Inject constructor(
 
     private fun isFetchFutureNeeded(): Boolean {
         val today = LocalDate.now()
-        val futureWeatherCount = futureWeatherDao.countFutureWeather(today)
+        val futureWeatherCount = localDataSource.countFutureWeather(today)
         return futureWeatherCount < FORECAST_DAYS_COUNT
     }
 
     private suspend fun fetchFutureWeather() {
-        weatherNetworkDataSource.fetchFutureWeather(
-            locationProvider.getPreferredLocationString(),
-            Locale.getDefault().language
+        val latLong = locationProvider.getPreferredLocationString()
+        networkDataSource.getFutureWeather(
+            latLong.first,
+            latLong.second,
+            OW_FUTURE_DAY_COUNT,
+            Locale.getDefault().language,
+            OW_METRIC_TYPE
         )
     }
 
-    private fun persistCurrentWeather(fetchedWeather: CurrentWeatherResponse){
-        GlobalScope.launch(Dispatchers.IO){
-            currentWeatherDao.upsert(fetchedWeather.currentWeatherEntry)
-            weatherLocationDao.upsert(fetchedWeather.location)
-        }
+    /*private suspend fun persistCurrentWeather(fetchedWeather: CurrentWeatherDTO){
+        localDataSource.upsertCurrentWeather(fetchedWeather.currentWeather)
+        localDataSource.upsertWeatherLocation(fetchedWeather.location)
     }
 
-    private fun persistFutureWeather(fetchedWeather: FutureWeatherResponse) {
-        GlobalScope.launch(Dispatchers.IO) {
-            deleteOldForecastData()
-            val futureWeatherList = ArrayList(fetchedWeather.forecastContainer.values)
-            futureWeatherList.forEachIndexed { index, futureWeatherInfo ->
-                futureWeatherDao.insert(mapEntity(index, futureWeatherInfo))
-            }
-            weatherLocationDao.upsert(fetchedWeather.location) // todo uncomment this and mocked response for release version
+    private suspend fun persistFutureWeather(fetchedWeather: WeatherForecastDTO) {
+        deleteOldForecastData()
+        val futureWeatherList = ArrayList(fetchedWeather.forecastContainer.values)
+        futureWeatherList.forEachIndexed { index, futureWeatherInfo ->
+            localDataSource.insertForecast(mapEntity(index, futureWeatherInfo))
         }
-    }
+        localDataSource.upsertWeatherLocation(fetchedWeather.location)
+    }*/
 
     private fun mapEntity(index: Int, it: FutureWeatherInfo): FutureWeatherEntry {
         return FutureWeatherEntry(
@@ -178,6 +161,6 @@ class ForecastRepositoryImpl @Inject constructor(
 
     private fun deleteOldForecastData() {
         val today = LocalDate.now()
-        futureWeatherDao.deleteOldEntries(today)
+        localDataSource.deleteOldForecastEntries(today)
     }
 }

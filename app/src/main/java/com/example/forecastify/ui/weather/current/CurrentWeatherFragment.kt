@@ -28,10 +28,10 @@ class CurrentWeatherFragment : ScopedFragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindUI()
+//        bindUI()
     }
 
-    private fun bindUI()= launch{
+    /*private fun bindUI()= launch{
         val currentWeather = viewModel.weather.await()
 
         val weatherLocation = viewModel.weatherLocation.await()
@@ -57,7 +57,7 @@ class CurrentWeatherFragment : ScopedFragment(){
                     .into(imageView_condition_icon)
             }
         })
-    }
+    }*/
 
     private fun chooseLocalisedUnitAbbreviation(metric: String, imperial: String): String{
         return if (viewModel.isMetricUnit) metric else imperial

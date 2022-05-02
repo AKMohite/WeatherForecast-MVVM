@@ -1,19 +1,19 @@
 package com.example.forecastify.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.forecastify.data.db.entity.WeatherLocationEntry
 import com.example.forecastify.data.db.unitlocalised.current.UnitSpecificCurrentEntry
 import com.example.forecastify.data.db.unitlocalised.future.detail.UnitDetailFutureWeatherEntry
 import com.example.forecastify.data.db.unitlocalised.future.list.UnitSpecificFutureEntry
+import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.LocalDate
 
 interface ForecastRepository {
 
-    suspend fun getCurrentWeather(metric: Boolean): LiveData<out UnitSpecificCurrentEntry>
+    fun getCurrentWeather(metric: Boolean): Flow<UnitSpecificCurrentEntry>
 
-    suspend fun getFutureWeatherList(startDate: LocalDate, metric: Boolean): LiveData<out List<UnitSpecificFutureEntry>>
+    fun getFutureWeatherList(startDate: LocalDate, metric: Boolean): Flow<List<UnitSpecificFutureEntry>>
 
-    suspend fun getFutureWeatherByDate(date: LocalDate, metric: Boolean): LiveData<out UnitDetailFutureWeatherEntry>
+    fun getFutureWeatherByDate(date: LocalDate, metric: Boolean): Flow<UnitDetailFutureWeatherEntry>
 
-    suspend fun getWeatherLocation(): LiveData<WeatherLocationEntry>
+    fun getWeatherLocation(): Flow<WeatherLocationEntry>
 }

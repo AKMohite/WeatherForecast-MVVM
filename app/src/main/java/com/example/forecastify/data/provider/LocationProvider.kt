@@ -4,5 +4,5 @@ import com.example.forecastify.data.db.entity.WeatherLocationEntry
 
 interface LocationProvider {
     suspend fun hasLocationChanged(lastWeatherLocation: WeatherLocationEntry): Boolean
-    suspend fun getPreferredLocationString(): String
+    suspend fun getPreferredLocationString(): Pair<Double, Double>
 }

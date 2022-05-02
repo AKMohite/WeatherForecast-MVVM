@@ -40,10 +40,10 @@ class FutureDetailWeatherFragment : ScopedFragment() {
 
 //        todo call detail api
         viewModel.getDetail(date)
-        bindUI()
+//        bindUI()
     }
 
-    private fun bindUI() = launch(Dispatchers.Main) {
+    /*private fun bindUI() = launch(Dispatchers.Main) {
         val weatherLocation = viewModel.weatherLocation.await()
 
         weatherLocation.observe(viewLifecycleOwner, Observer { location ->
@@ -67,7 +67,7 @@ class FutureDetailWeatherFragment : ScopedFragment() {
                 .load(weatherEntry.conditionIconUrl)
                 .into(imageView_condition_icon)
         })
-    }
+    }*/
 
     private fun chooseLocalizedUnitAbbreviation(metric: String, imperial: String): String {
         return if (viewModel.isMetricUnit) metric else imperial
