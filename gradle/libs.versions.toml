@@ -15,8 +15,25 @@ materialIconsExtended = "1.7.8"
 retrofit = "3.0.0"
 okhttp = "5.4.0"
 kotlinxSerialization = "1.11.0"
+room = "2.6.1"
+work = "2.11.2"
+playServicesLocation = "21.4.0"
+coil = "2.7.0"
+accompanist = "0.37.3"
+kotlinxDatetime = "0.8.0"
+timber = "5.0.1"
 
 [libraries]
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltNavigationCompose" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
