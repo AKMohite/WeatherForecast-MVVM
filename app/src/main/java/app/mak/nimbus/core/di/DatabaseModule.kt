@@ -2,6 +2,7 @@ package app.mak.nimbus.core.di
 
 import android.content.Context
 import androidx.room.Room
+import app.mak.nimbus.core.data.local.RoomWeatherDatabase
 import app.mak.nimbus.core.data.local.WeatherDatabase
 import app.mak.nimbus.core.data.local.dao.CityDao
 import app.mak.nimbus.core.data.local.dao.WeatherDao
@@ -23,7 +24,7 @@ object DatabaseModule {
     ): WeatherDatabase {
         return Room.databaseBuilder(
             context,
-            WeatherDatabase::class.java,
+            RoomWeatherDatabase::class.java,
             "weather.db"
         ).build()
     }

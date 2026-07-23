@@ -3,6 +3,7 @@ package app.mak.nimbus.core.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.withTransaction
 import app.mak.nimbus.core.data.local.converter.WeatherTypeConverters
 import app.mak.nimbus.core.data.local.dao.CityDao
 import app.mak.nimbus.core.data.local.dao.WeatherDao
@@ -24,7 +25,19 @@ import app.mak.nimbus.core.data.local.entity.WeatherAlertEntity
     exportSchema = false
 )
 @TypeConverters(WeatherTypeConverters::class)
-abstract class WeatherDatabase : RoomDatabase() {
-    abstract fun cityDao(): CityDao
-    abstract fun weatherDao(): WeatherDao
+abstract class RoomWeatherDatabase : RoomDatabase(), WeatherDatabase {
+
+    override suspend fun inTransaction(block: () -> Unit) {
+        this.withTransaction {
+            block()
+        }
+    }
+
+}
+
+interface WeatherDatabase {
+    fun cityDao(): CityDao
+    fun weatherDao(): WeatherDao
+
+    suspend fun inTransaction(block: () -> Unit)
 }
