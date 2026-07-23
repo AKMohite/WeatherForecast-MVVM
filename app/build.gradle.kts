@@ -8,18 +8,14 @@ plugins {
 
 android {
     namespace = "app.mak.nimbus"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "app.mak.nimbus"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -69,7 +65,6 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.timber)
     testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

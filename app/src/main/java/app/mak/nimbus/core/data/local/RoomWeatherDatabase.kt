@@ -24,7 +24,6 @@ import app.mak.nimbus.core.data.local.entity.WeatherAlertEntity
     version = 1,
     exportSchema = false
 )
-@TypeConverters(WeatherTypeConverters::class)
 abstract class RoomWeatherDatabase : RoomDatabase(), WeatherDatabase {
 
     override suspend fun inTransaction(block: () -> Unit) {

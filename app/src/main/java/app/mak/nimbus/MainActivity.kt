@@ -15,7 +15,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NimbusTheme {
-                WeatherRoute()
+                /*WeatherRoute(
+                    onAddCityClick = {}
+                )*/
             }
         }
     }
