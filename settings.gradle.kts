@@ -26,3 +26,4 @@ rootProject.name = "Atmosense"
 include(":app")
 include(":core:network")
 include(":core:databse")
+include(":core:domain")
