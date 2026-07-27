@@ -1,4 +1,4 @@
-package app.mak.nimbus.ui.theme
+package app.mak.atmosense.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

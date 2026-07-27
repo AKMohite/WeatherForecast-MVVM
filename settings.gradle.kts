@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Nimbus"
+rootProject.name = "Atmosense"
 include(":app")
