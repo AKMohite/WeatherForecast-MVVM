@@ -25,6 +25,6 @@ dependencyResolutionManagement {
 rootProject.name = "Atmosense"
 include(":app")
 include(":core:network")
-include(":core:databse")
+include(":core:database")
 include(":core:domain")
 include(":core:data")

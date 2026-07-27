@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-  namespace = "app.mak.atmosense.core.databse"
+  namespace = "app.mak.atmosense.core.database"
   compileSdk = libs.versions.compileSDK.get().toInt()
 
   defaultConfig {
