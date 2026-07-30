@@ -8,7 +8,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -37,25 +36,25 @@ interface NetworkProviders {
     return HttpClient {
       install(ContentNegotiation) {
         json(json)
-        this@HttpClient.defaultRequest {
-          url {
-            protocol = URLProtocol.HTTPS
-            host = API_HOST
-            header("X-ListenAPI-Key", API_KEY)
-            //                path("api/")
-            //                parametersOf("api_key", "")
-          }
+      }
+      defaultRequest {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = API_HOST
+          parameters.append("appId", API_KEY)
         }
-        this@HttpClient.HttpResponseValidator {
-          handleResponseExceptionWithRequest { exception, request ->
-            /*val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
-            val exceptionResponse = clientException.response
-            if (exceptionResponse.status == HttpStatusCode.NotFound) {
-                val exceptionResponseText = exceptionResponse.bodyAsText()
-                throw MissingPageException(exceptionResponse, exceptionResponseText)
-            }*/
+      }
+      HttpResponseValidator {
+        handleResponseExceptionWithRequest { exception, request ->
+          println(exception)
+          println(request)
+          /*val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+          val exceptionResponse = clientException.response
+          if (exceptionResponse.status == HttpStatusCode.NotFound) {
+              val exceptionResponseText = exceptionResponse.bodyAsText()
+              throw MissingPageException(exceptionResponse, exceptionResponseText)
+          }*/
 //                throw handleKtorExceptions(exception) ?: UnknownAPIException(throwable = exception)
-          }
         }
       }
     }
