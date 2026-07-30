@@ -11,7 +11,7 @@ interface WeatherAPI {
 
 @ContributesBinding(scope = AppScope::class)
 @Inject
-internal class OpenWeatherMapAPI(
+class OpenWeatherMapAPI(
   private val httpClient: HttpClient
 ) : WeatherAPI {
   override suspend fun getCurrentWeather(): String {

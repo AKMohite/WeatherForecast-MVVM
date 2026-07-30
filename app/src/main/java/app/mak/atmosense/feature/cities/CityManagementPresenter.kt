@@ -23,8 +23,7 @@ class CityManagementPresenter(
   @Composable
   override fun present(): CityManagementScreen.State {
     val cities by produceState("Empty String") {
-//      value = weatherRepository.getCurrentWeather()
-      value = "new string"
+      value = weatherRepository.getCurrentWeather()
     }
     return CityManagementScreen.State(
       dummy = cities,

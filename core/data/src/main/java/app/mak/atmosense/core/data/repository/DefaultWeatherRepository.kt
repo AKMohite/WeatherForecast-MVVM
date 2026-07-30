@@ -8,7 +8,7 @@ import dev.zacsweers.metro.Inject
 
 @ContributesBinding(scope = AppScope::class)
 @Inject
-internal class DefaultWeatherRepository(
+class DefaultWeatherRepository(
   private val weatherAPI: WeatherAPI
 ) : WeatherRepository {
   override suspend fun getCurrentWeather(): String {
