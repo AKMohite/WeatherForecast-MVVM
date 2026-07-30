@@ -18,6 +18,7 @@ android {
     versionName = "0.0.1"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    buildConfigField("String", "OWM_API_KEY", "\"" + propOrDef("OWM_API_KEY", "") + "\"")
   }
 
   buildTypes {
@@ -33,6 +34,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
 }
 
@@ -41,6 +43,7 @@ ksp {
 }
 
 dependencies {
+  implementation(project(":core:common"))
   implementation(project(":core:domain"))
   implementation(project(":core:network"))
   implementation(project(":core:database"))
@@ -61,4 +64,13 @@ dependencies {
   androidTestImplementation(libs.androidx.junit)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
   debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+fun <T : Any> propOrDef(
+  propertyName: String,
+  defaultValue: T,
+): T {
+  @Suppress("UNCHECKED_CAST")
+  val propertyValue = project.findProperty(propertyName) as? T?
+  return propertyValue ?: defaultValue
 }

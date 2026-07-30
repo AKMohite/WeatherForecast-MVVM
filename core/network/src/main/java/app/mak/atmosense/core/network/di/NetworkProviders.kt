@@ -1,5 +1,6 @@
 package app.mak.atmosense.core.network.di
 
+import app.mak.atmosense.core.common.di.OWMApiKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -13,9 +14,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 private const val API_HOST = "api.openweathermap.org"
-
-//private const val API_HOST = "listen-api.listennotes.com"
-private const val API_KEY = ""
 
 @ContributesTo(AppScope::class)
 interface NetworkProviders {
@@ -32,7 +30,10 @@ interface NetworkProviders {
 
   @SingleIn(AppScope::class)
   @Provides
-  fun provideHttpClient(json: Json): HttpClient {
+  fun provideHttpClient(
+    json: Json,
+    @OWMApiKey owmApiKey: String,
+  ): HttpClient {
     return HttpClient {
       install(ContentNegotiation) {
         json(json)
@@ -41,7 +42,7 @@ interface NetworkProviders {
         url {
           protocol = URLProtocol.HTTPS
           host = API_HOST
-          parameters.append("appId", API_KEY)
+          parameters.append("appId", owmApiKey)
         }
       }
       HttpResponseValidator {

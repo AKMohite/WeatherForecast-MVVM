@@ -19,9 +19,8 @@ class OpenWeatherMapAPI(
 ) : WeatherAPI {
   override suspend fun getCurrentWeather(): String {
     val queryMap = mapOf(
-      "lat" to "72.19",
-      "lon" to "17.84",
-//      "appid" to "asdasd"
+      "lat" to "35.0116",
+      "lon" to "135.7681"
     )
     val queries = getAllQueries(queryMap)
     return httpClient.get("/data/2.5/weather?$queries").body<CurrentWeatherDTO>().toString()
