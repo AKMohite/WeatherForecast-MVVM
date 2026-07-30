@@ -42,6 +42,9 @@ interface CircuitProviders {
     return Circuit.Builder()
       .addPresenterFactories(presenterFactories)
       .addUiFactories(uiFactories)
+//      .setOnUnavailableContent { screen, modifier ->
+//
+//      }
       .build()
   }
 }

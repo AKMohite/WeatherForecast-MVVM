@@ -7,8 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import app.mak.atmosense.di.AppGraph
 import app.mak.atmosense.feature.cities.CityManagementScreen
 import app.mak.atmosense.ui.theme.AtmosenseTheme
+import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.CircuitCompositionLocals
-import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.foundation.rememberCircuitNavigator
 import dev.zacsweers.metro.createGraph
 
 class MainActivity : ComponentActivity() {
@@ -21,8 +23,10 @@ class MainActivity : ComponentActivity() {
     val appGraph = createGraph<AppGraph>()
     setContent {
       AtmosenseTheme {
-        CircuitCompositionLocals(circuit = appGraph.circuit) {
-          CircuitContent(CityManagementScreen)
+        val backStack = rememberSaveableBackStack(CityManagementScreen)
+        val navigator = rememberCircuitNavigator(backStack)
+        CircuitCompositionLocals(appGraph.circuit) {
+          NavigableCircuitContent(navigator = navigator, backStack = backStack)
         }
       }
     }
