@@ -1,9 +1,14 @@
 package app.mak.atmosense.feature.cities
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import com.slack.circuit.runtime.CircuitUiState
+import com.slack.circuit.runtime.screen.Screen
+import kotlinx.parcelize.Parcelize
 
-@Composable
-internal fun CityManagementScreen(modifier: Modifier = Modifier) {
+@Parcelize
+data object CityManagementScreen : Screen {
+
+  data class State(
+    val dummy: String
+  ) : CircuitUiState
 
 }

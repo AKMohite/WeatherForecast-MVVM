@@ -1,20 +1,22 @@
 package app.mak.atmosense.feature.cities
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import app.mak.atmosense.core.domain.repository.WeatherRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import com.slack.circuit.runtime.presenter.Presenter
 
 internal class CityManagementPresenter(
-  private val weatherRepository: WeatherRepository
-) : ViewModel() {
-  val state = flow {
-    emit(weatherRepository.getCurrentWeather())
-  }.stateIn(
-    scope = viewModelScope,
-    started = SharingStarted.WhileSubscribed(5000),
-    initialValue = "Empty"
-  )
+//  private val weatherRepository: WeatherRepository
+) : Presenter<CityManagementScreen.State> {
+
+  @Composable
+  override fun present(): CityManagementScreen.State {
+    val cities by produceState("Empty String") {
+//      value = weatherRepository.getCurrentWeather()
+      value = "new string"
+    }
+    return CityManagementScreen.State(
+      dummy = cities
+    )
+  }
 }
