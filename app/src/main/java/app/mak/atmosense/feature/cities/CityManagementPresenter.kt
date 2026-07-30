@@ -3,6 +3,8 @@ package app.mak.atmosense.feature.cities
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import app.mak.atmosense.feature.search.SearchScreen
+import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -24,8 +26,16 @@ class CityManagementPresenter(
       value = "new string"
     }
     return CityManagementScreen.State(
-      dummy = cities
+      dummy = cities,
+      eventSink = ::handleEvents
     )
+  }
+
+  private fun handleEvents(event: CityManagementScreen.Event) {
+    when (event) {
+      CityManagementScreen.Event.Search -> navigator.goTo(SearchScreen)
+      is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
+    }
   }
 
   @CircuitInject(CityManagementScreen::class, AppScope::class)

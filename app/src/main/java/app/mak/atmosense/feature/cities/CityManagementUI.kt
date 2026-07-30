@@ -1,5 +1,8 @@
 package app.mak.atmosense.feature.cities
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,5 +15,12 @@ internal fun CityManagementUI(
   state: CityManagementScreen.State,
   modifier: Modifier = Modifier
 ) {
-  Text(state.dummy)
+  Column(
+    modifier = modifier,
+    verticalArrangement = Arrangement.SpaceBetween
+  ) {
+    Text(state.dummy)
+    Button(onClick = { state.eventSink(CityManagementScreen.Event.Search) }) { Text("Search") }
+    Button(onClick = { state.eventSink(CityManagementScreen.Event.Details(8599)) }) { Text("Details") }
+  }
 }
