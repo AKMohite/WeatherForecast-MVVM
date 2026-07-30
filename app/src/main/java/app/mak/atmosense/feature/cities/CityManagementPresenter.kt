@@ -3,6 +3,7 @@ package app.mak.atmosense.feature.cities
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import app.mak.atmosense.core.domain.repository.WeatherRepository
 import app.mak.atmosense.feature.search.SearchScreen
 import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -15,8 +16,8 @@ import dev.zacsweers.metro.AssistedInject
 
 @AssistedInject
 class CityManagementPresenter(
-  @Assisted private val navigator: Navigator
-//  private val weatherRepository: WeatherRepository
+  @Assisted private val navigator: Navigator,
+  private val weatherRepository: WeatherRepository
 ) : Presenter<CityManagementScreen.State> {
 
   @Composable
