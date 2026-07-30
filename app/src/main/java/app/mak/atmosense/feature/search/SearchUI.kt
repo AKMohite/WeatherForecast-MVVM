@@ -8,6 +8,9 @@ import dev.zacsweers.metro.AppScope
 
 @CircuitInject(screen = SearchScreen::class, scope = AppScope::class)
 @Composable
-internal fun SearchUI(modifier: Modifier = Modifier) {
-  Text("Search Screen")
+internal fun SearchUI(
+  state: SearchScreen.State,
+  modifier: Modifier = Modifier
+) {
+  Text(state.query)
 }

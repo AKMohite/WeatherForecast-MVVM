@@ -8,6 +8,9 @@ import dev.zacsweers.metro.AppScope
 
 @CircuitInject(screen = WeatherDetailsScreen::class, scope = AppScope::class)
 @Composable
-internal fun WeatherDetailsUI(modifier: Modifier = Modifier) {
-  Text("Weather Details Screen")
+internal fun WeatherDetailsUI(
+  modifier: Modifier = Modifier,
+  state: WeatherDetailsScreen.State
+) {
+  Text("Weather Details Screen: ${state.cityId}")
 }
