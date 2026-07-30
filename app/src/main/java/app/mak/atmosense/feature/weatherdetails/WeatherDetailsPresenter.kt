@@ -11,16 +11,20 @@ import dev.zacsweers.metro.AssistedInject
 
 @AssistedInject
 class WeatherDetailsPresenter(
+  @Assisted private val screen: WeatherDetailsScreen,
   @Assisted private val navigator: Navigator
 ) : Presenter<WeatherDetailsScreen.State> {
   @Composable
   override fun present(): WeatherDetailsScreen.State {
-    return WeatherDetailsScreen.State(45545)
+    return WeatherDetailsScreen.State(screen.cityId)
   }
 
   @CircuitInject(WeatherDetailsScreen::class, AppScope::class)
   @AssistedFactory
   interface Factory {
-    fun create(navigator: Navigator): WeatherDetailsPresenter
+    fun create(
+      screen: WeatherDetailsScreen,
+      navigator: Navigator
+    ): WeatherDetailsPresenter
   }
 }

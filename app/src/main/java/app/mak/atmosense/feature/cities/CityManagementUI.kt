@@ -21,6 +21,6 @@ internal fun CityManagementUI(
   ) {
     Text(state.dummy)
     Button(onClick = { state.eventSink(CityManagementScreen.Event.Search) }) { Text("Search") }
-    Button(onClick = { state.eventSink(CityManagementScreen.Event.Details(8599)) }) { Text("Details") }
+    Button(onClick = { state.eventSink(CityManagementScreen.Event.Details(4586)) }) { Text("Details") }
   }
 }
