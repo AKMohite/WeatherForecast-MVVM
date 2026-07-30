@@ -4,35 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import app.mak.atmosense.feature.cities.CityManagementPresenter
+import app.mak.atmosense.di.AppGraph
 import app.mak.atmosense.feature.cities.CityManagementScreen
-import app.mak.atmosense.feature.cities.CityManagementUI
 import app.mak.atmosense.ui.theme.AtmosenseTheme
-import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.CircuitContent
+import dev.zacsweers.metro.createGraph
 
 class MainActivity : ComponentActivity() {
 
-  val circuit: Circuit =
-    Circuit.Builder()
-      .addPresenter<CityManagementScreen, CityManagementScreen.State>(
-        CityManagementPresenter()
-      )
-      .addUi<CityManagementScreen, CityManagementScreen.State> { state, modifier ->
-        CityManagementUI(
-          state,
-          modifier
-        )
-      }
-      .build()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
+    val appGraph = createGraph<AppGraph>()
     setContent {
       AtmosenseTheme {
-        CircuitCompositionLocals(circuit = circuit) {
+        CircuitCompositionLocals(circuit = appGraph.circuit) {
           CircuitContent(CityManagementScreen)
         }
       }
