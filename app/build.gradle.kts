@@ -36,6 +36,10 @@ android {
   }
 }
 
+ksp {
+  arg("circuit.codegen.mode", "metro")
+}
+
 dependencies {
   implementation(project(":core:domain"))
   implementation(project(":core:network"))
