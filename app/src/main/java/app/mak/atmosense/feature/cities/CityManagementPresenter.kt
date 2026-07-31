@@ -3,6 +3,7 @@ package app.mak.atmosense.feature.cities
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberCoroutineScope
 import app.mak.atmosense.core.domain.repository.WeatherRepository
 import app.mak.atmosense.core.location.LocationAccessCoordinator
 import app.mak.atmosense.feature.search.SearchScreen
@@ -14,6 +15,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.launch
 
 @AssistedInject
 class CityManagementPresenter(
@@ -24,24 +26,27 @@ class CityManagementPresenter(
 
   @Composable
   override fun present(): CityManagementScreen.State {
+    val scope = rememberCoroutineScope()
     val cities by produceState("Empty String") {
-      val result = locationAccessCoordinator.resolveCurrentLocation()
-      println(result)
       value = weatherRepository.getCurrentWeather()
     }
     return CityManagementScreen.State(
       dummy = cities,
-      eventSink = ::handleEvents
-    )
-  }
+      eventSink = { event ->
+        when (event) {
+          CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
+          is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
+          CityManagementScreen.Event.FetchCurrentLocationWeather -> {
+            scope.launch {
+              val result = locationAccessCoordinator.resolveCurrentLocation()
+              println(result)
+            }
+          }
 
-  private fun handleEvents(event: CityManagementScreen.Event) {
-    when (event) {
-      CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
-      is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
-      CityManagementScreen.Event.FetchCurrentLocationWeather -> {}
-      CityManagementScreen.Event.OpenAppSettings -> {}
-    }
+          CityManagementScreen.Event.OpenAppSettings -> {}
+        }
+      }
+    )
   }
 
   @CircuitInject(CityManagementScreen::class, AppScope::class)

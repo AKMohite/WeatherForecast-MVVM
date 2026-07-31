@@ -11,7 +11,7 @@ import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
-import dev.zacsweers.metro.createGraph
+import dev.zacsweers.metro.createGraphFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     // TODO need to check graph
-    val appGraph = createGraph<AppGraph>()
+    val appGraph = createGraphFactory<AppGraph.Factory>().create(applicationContext)
     setContent {
       AtmosenseTheme {
         val backStack = rememberSaveableBackStack(CityManagementScreen)

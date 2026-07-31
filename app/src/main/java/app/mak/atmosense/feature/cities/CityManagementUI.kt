@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
@@ -38,13 +40,20 @@ internal fun CityManagementUI(
   state: CityManagementScreen.State,
   modifier: Modifier = Modifier
 ) {
-  Column(
-    modifier = modifier,
-    verticalArrangement = Arrangement.SpaceBetween
+  val snackbarHostState = SnackbarHostState()
+  Scaffold(
+    snackbarHost = { SnackbarHost(snackbarHostState) }
   ) {
-    Text(state.dummy)
-    Button(onClick = { state.eventSink(CityManagementScreen.Event.SearchLocation) }) { Text("Search") }
-    Button(onClick = { state.eventSink(CityManagementScreen.Event.Details(4586)) }) { Text("Details") }
+    Column(
+      modifier = modifier
+        .padding(vertical = it.calculateTopPadding()),
+      verticalArrangement = Arrangement.Center
+    ) {
+      EmptyContent(
+        event = state.eventSink,
+        snackbarHostState = snackbarHostState
+      )
+    }
   }
 }
 

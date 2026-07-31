@@ -8,6 +8,7 @@ import com.google.android.gms.location.Priority
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeoutOrNull
@@ -17,6 +18,7 @@ interface LocationService {
   suspend fun getCurrentLocation(): AppResult<Coordinates>
 }
 
+@SingleIn(AppScope::class)
 @ContributesBinding(scope = AppScope::class)
 @Inject
 class FuseLocationService(
