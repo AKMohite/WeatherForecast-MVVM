@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+  implementation(project(":core:common"))
   implementation(libs.play.services.location)
   implementation(libs.kotlinx.coroutines.play.services)
 }

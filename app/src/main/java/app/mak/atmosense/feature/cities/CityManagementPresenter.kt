@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import app.mak.atmosense.core.domain.repository.WeatherRepository
+import app.mak.atmosense.core.location.LocationAccessCoordinator
 import app.mak.atmosense.feature.search.SearchScreen
 import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -17,12 +18,15 @@ import dev.zacsweers.metro.AssistedInject
 @AssistedInject
 class CityManagementPresenter(
   @Assisted private val navigator: Navigator,
-  private val weatherRepository: WeatherRepository
+  private val weatherRepository: WeatherRepository,
+  private val locationAccessCoordinator: LocationAccessCoordinator,
 ) : Presenter<CityManagementScreen.State> {
 
   @Composable
   override fun present(): CityManagementScreen.State {
     val cities by produceState("Empty String") {
+      val result = locationAccessCoordinator.resolveCurrentLocation()
+      println(result)
       value = weatherRepository.getCurrentWeather()
     }
     return CityManagementScreen.State(
