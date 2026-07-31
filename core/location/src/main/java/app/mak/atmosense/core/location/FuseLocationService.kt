@@ -2,6 +2,7 @@ package app.mak.atmosense.core.location
 
 import app.mak.atmosense.core.common.model.AppError
 import app.mak.atmosense.core.common.model.AppResult
+import app.mak.atmosense.core.common.model.LocationCoordinate
 import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
@@ -15,7 +16,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.milliseconds
 
 interface LocationService {
-  suspend fun getCurrentLocation(): AppResult<Coordinates>
+  suspend fun getCurrentLocation(): AppResult<LocationCoordinate>
 }
 
 @SingleIn(AppScope::class)
@@ -26,7 +27,7 @@ class FuseLocationService(
 ) : LocationService {
 
   //  @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-  override suspend fun getCurrentLocation(): AppResult<Coordinates> {
+  override suspend fun getCurrentLocation(): AppResult<LocationCoordinate> {
     return try {
       val request = CurrentLocationRequest.Builder()
         .setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY)
@@ -36,7 +37,12 @@ class FuseLocationService(
       }
       val location = fresh ?: fusedClient.lastLocation.await()
       if (location != null) {
-        AppResult.Success(Coordinates(latitude = location.latitude, longitude = location.longitude))
+        AppResult.Success(
+          LocationCoordinate(
+            latitude = location.latitude,
+            longitude = location.longitude
+          )
+        )
       } else {
         AppResult.Failure(AppError.Unknown(code = null, message = "No location available"))
       }
@@ -55,7 +61,3 @@ class FuseLocationService(
   }
 }
 
-data class Coordinates(
-  val latitude: Double,
-  val longitude: Double,
-)
