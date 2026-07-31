@@ -14,7 +14,9 @@ data object CityManagementScreen : Screen {
   ) : CircuitUiState
 
   sealed interface Event : CircuitUiEvent {
-    data object Search : Event
+    data object SearchLocation : Event
+    data object FetchCurrentLocationWeather : Event
+    data object OpenAppSettings : Event
     data class Details(val cityId: Long) : Event
   }
 

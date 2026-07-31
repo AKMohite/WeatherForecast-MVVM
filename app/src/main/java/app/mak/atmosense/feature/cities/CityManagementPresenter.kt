@@ -33,8 +33,10 @@ class CityManagementPresenter(
 
   private fun handleEvents(event: CityManagementScreen.Event) {
     when (event) {
-      CityManagementScreen.Event.Search -> navigator.goTo(SearchScreen)
+      CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
       is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
+      CityManagementScreen.Event.FetchCurrentLocationWeather -> {}
+      CityManagementScreen.Event.OpenAppSettings -> {}
     }
   }
 

@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">atmosense</string>
+  <string name="app_name">Atmosense</string>
+  <string name="search_new_location">Search and add new location</string>
+  <string name="get_current_location">Get current location</string>
+  <string name="fetch_current_location">Fetch current location</string>
+  <string name="add_location">Add location</string>
+  <string name="temperature">%.2f°</string>
+  <string name="feels_like">Feels like %.2f°</string>
+  <string name="search_hint">Search…</string>
+  <string name="hourly">Hourly</string>
+  <string name="humidity">Humidity: %1$d%%</string>
+  <string name="pressure">Pressure: %1$d hPa</string>
+  <string name="wind_speed">Wind Speed: %1$.2f m/s</string>
+  <string name="wind_direction">Wind Direction: %1$d°</string>
+  <string name="location_permission_denied">Location permission is required to fetch weather for your current location.</string>
+  <string name="settings">Settings</string>
 </resources>
