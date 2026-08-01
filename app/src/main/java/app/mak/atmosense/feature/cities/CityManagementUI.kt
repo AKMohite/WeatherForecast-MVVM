@@ -42,6 +42,7 @@ internal fun CityManagementUI(
   modifier: Modifier = Modifier
 ) {
   val snackbarHostState = SnackbarHostState()
+  val eventSink: (CityManagementScreen.Event) -> Unit = {}
   Scaffold(
     snackbarHost = { SnackbarHost(snackbarHostState) }
   ) {
@@ -51,7 +52,7 @@ internal fun CityManagementUI(
       verticalArrangement = Arrangement.Center
     ) {
       EmptyContent(
-        event = state.eventSink,
+        event = eventSink,
         snackbarHostState = snackbarHostState
       )
     }

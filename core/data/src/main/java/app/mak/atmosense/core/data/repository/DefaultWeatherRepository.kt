@@ -13,6 +13,8 @@ import app.mak.atmosense.core.network.WeatherAPI
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlin.time.Clock
 
 @ContributesBinding(scope = AppScope::class)
@@ -41,6 +43,13 @@ class DefaultWeatherRepository(
     } catch (t: Throwable) {
       AppResult.Failure(exception = t.toAppException())
     }
+  }
+
+  override fun observeCitiesWeather(): Flow<List<String>> {
+    return currentWeatherDAO.observeCitiesWeather()
+      .map {
+        listOf(it.toString())
+      }
   }
 }
 

@@ -1,11 +1,16 @@
 package app.mak.atmosense.core.database.dao.impl
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import app.mak.atmosense.core.database.AtmosenseDatabase
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
+import app.mak.atmosense.core.database.dao.GetCitiesWeather
 import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
@@ -30,5 +35,11 @@ class SqlDelightCurrentWeatherDAO(
 
   override fun deleteAll() {
     query.deleteAll()
+  }
+
+  override fun observeCitiesWeather(): Flow<List<GetCitiesWeather>> {
+    return query.getCitiesWeather()
+      .asFlow()
+      .mapToList(Dispatchers.IO)
   }
 }

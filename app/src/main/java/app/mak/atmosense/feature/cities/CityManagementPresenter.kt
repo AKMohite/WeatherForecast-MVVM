@@ -2,6 +2,7 @@ package app.mak.atmosense.feature.cities
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import app.mak.atmosense.core.domain.usecase.ObserveCitiesWeather
 import app.mak.atmosense.feature.search.SearchScreen
 import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -16,12 +17,13 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class CityManagementPresenter(
   @Assisted private val navigator: Navigator,
-  private val fetchCurrentLocationWeather: FetchCurrentLocationWeather
+  private val fetchCurrentLocationWeather: FetchCurrentLocationWeather,
+  private val observeCitiesWeather: ObserveCitiesWeather
 ) : Presenter<CityManagementScreen.State> {
 
   @Composable
   override fun present(): CityManagementScreen.State {
-    val cities = "emptyList<String>()"
+    val cities: String? = "emptyList<String>()"
     val scope = rememberCoroutineScope()
     val eventSink: (CityManagementScreen.Event) -> Unit = { event ->
       when (event) {
@@ -36,10 +38,11 @@ class CityManagementPresenter(
         CityManagementScreen.Event.OpenAppSettings -> {}
       }
     }
-    return CityManagementScreen.State(
-      dummy = cities,
-      eventSink = eventSink
-    )
+    return when {
+      cities == null -> CityManagementScreen.State.Loading
+      cities.isEmpty() -> CityManagementScreen.State.Empty
+      else -> CityManagementScreen.State.Success(cities, eventSink)
+    }
   }
 
   @CircuitInject(CityManagementScreen::class, AppScope::class)

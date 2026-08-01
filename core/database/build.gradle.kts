@@ -23,6 +23,8 @@ android {
 dependencies {
   implementation(libs.kotlinx.datetime)
   implementation(libs.android.sql)
+  implementation(libs.sql.coroutines.extensions)
+  implementation(libs.kotlinx.coroutines.core)
 }
 
 sqldelight {

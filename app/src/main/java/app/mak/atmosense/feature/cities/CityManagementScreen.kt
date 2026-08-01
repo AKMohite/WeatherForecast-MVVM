@@ -8,10 +8,16 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data object CityManagementScreen : Screen {
 
-  data class State(
-    val dummy: String,
-    val eventSink: (Event) -> Unit,
-  ) : CircuitUiState
+  sealed interface State : CircuitUiState {
+    data object Loading : State
+    data object Empty : State
+    data class Success(
+      val dummy: String,
+      val eventSink: (Event) -> Unit
+    ) : State
+
+    data class Error(val message: String) : State
+  }
 
   sealed interface Event : CircuitUiEvent {
     data object SearchLocation : Event
