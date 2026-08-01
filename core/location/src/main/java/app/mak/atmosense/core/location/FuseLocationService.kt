@@ -40,7 +40,8 @@ class FuseLocationService(
         AppResult.Success(
           LocationCoordinate(
             latitude = location.latitude,
-            longitude = location.longitude
+            longitude = location.longitude,
+            isCurrentLocation = true
           )
         )
       } else {

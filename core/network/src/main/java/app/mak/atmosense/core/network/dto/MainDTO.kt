@@ -10,9 +10,9 @@ data class MainDTO(
   @SerialName("grnd_level")
   val groundLevel: Int? = null,
   @SerialName("humidity")
-  val humidity: Int? = null,
+  val humidity: Long? = null,
   @SerialName("pressure")
-  val pressure: Int? = null,
+  val pressure: Long? = null,
   @SerialName("sea_level")
   val seaLevel: Int? = null,
   @SerialName("temp")

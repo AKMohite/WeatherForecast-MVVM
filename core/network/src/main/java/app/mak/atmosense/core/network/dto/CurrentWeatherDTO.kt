@@ -17,7 +17,7 @@ data class CurrentWeatherDTO(
   @SerialName("dt")
   val dt: Long? = null,
   @SerialName("id")
-  val id: Int? = null,
+  val cityId: Long,
   @SerialName("main")
   val main: MainDTO? = null,
   @SerialName("name")

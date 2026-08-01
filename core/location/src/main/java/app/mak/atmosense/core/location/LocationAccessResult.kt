@@ -7,6 +7,6 @@ sealed interface LocationAccessResult {
   data class Available(val coordinates: LocationCoordinate) : LocationAccessResult
 
   //  data object PermissionDenied: LocationAccessResult
-  data class Unavailable(val error: AppError) : LocationAccessResult
+  data class Unavailable(val error: AppError?) : LocationAccessResult
 }
 

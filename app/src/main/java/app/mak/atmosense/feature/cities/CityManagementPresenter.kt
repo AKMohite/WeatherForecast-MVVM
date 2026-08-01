@@ -1,7 +1,6 @@
 package app.mak.atmosense.feature.cities
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import app.mak.atmosense.feature.search.SearchScreen
 import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
@@ -24,26 +23,27 @@ class CityManagementPresenter(
   override fun present(): CityManagementScreen.State {
     val cities = "emptyList<String>()"
     val scope = rememberCoroutineScope()
-    LaunchedEffect(Unit) {
-      scope.launch {
-        fetchCurrentLocationWeather()
+//    LaunchedEffect(Unit) {
+//      scope.launch {
+//        fetchCurrentLocationWeather()
+//      }
+//    }
+    val eventSink: (CityManagementScreen.Event) -> Unit = { event ->
+      when (event) {
+        CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
+        is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
+        CityManagementScreen.Event.FetchCurrentLocationWeather -> {
+          scope.launch {
+            fetchCurrentLocationWeather()
+          }
+        }
+
+        CityManagementScreen.Event.OpenAppSettings -> {}
       }
     }
     return CityManagementScreen.State(
       dummy = cities,
-      eventSink = { event ->
-        when (event) {
-          CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
-          is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
-          CityManagementScreen.Event.FetchCurrentLocationWeather -> {
-            scope.launch {
-              fetchCurrentLocationWeather()
-            }
-          }
-
-          CityManagementScreen.Event.OpenAppSettings -> {}
-        }
-      }
+      eventSink = eventSink
     )
   }
 

@@ -2,5 +2,6 @@ package app.mak.atmosense.core.common.model
 
 sealed interface AppResult<out T> {
   data class Success<T>(val value: T) : AppResult<T>
-  data class Failure(val error: AppError) : AppResult<Nothing>
+  data class Failure(val error: AppError? = null, val exception: AppException? = null) :
+    AppResult<Nothing>
 }

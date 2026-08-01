@@ -1,29 +1,42 @@
 package app.mak.atmosense.core.data.repository
 
+import app.mak.atmosense.core.common.model.AppResult
 import app.mak.atmosense.core.common.model.LocationCoordinate
+import app.mak.atmosense.core.data.mapper.toAppException
+import app.mak.atmosense.core.data.mapper.toCityEntity
+import app.mak.atmosense.core.data.mapper.toCurrentWeatherEntity
+import app.mak.atmosense.core.database.dao.api.CityDAO
+import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
 import app.mak.atmosense.core.domain.repository.WeatherRepository
 import app.mak.atmosense.core.network.WeatherAPI
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Clock
 
 @ContributesBinding(scope = AppScope::class)
 @Inject
 class DefaultWeatherRepository(
-  private val weatherAPI: WeatherAPI
+  private val weatherAPI: WeatherAPI,
+  private val cityDAO: CityDAO,
+  private val currentWeatherDAO: CurrentWeatherDAO
 ) : WeatherRepository {
 
-  override suspend fun fetchCurrentWeather(coordinates: LocationCoordinate) {
-    try {
+  override suspend fun fetchCurrentWeather(coordinates: LocationCoordinate): AppResult<Unit> {
+    return try {
       val queries = mapOf(
         "lat" to coordinates.latitude.toString(),
         "lon" to coordinates.longitude.toString(),
         "unit" to "metric"
       )
       val currentWeather = weatherAPI.getCurrentWeather(queries)
+      val now = Clock.System.now()
+      cityDAO.insert(currentWeather.toCityEntity(now))
+      currentWeatherDAO.insert(currentWeather.toCurrentWeatherEntity(now))
+      AppResult.Success(Unit)
     } catch (t: Throwable) {
-      if (t is CancellationException) throw t
+      AppResult.Failure(exception = t.toAppException())
     }
   }
 }
+

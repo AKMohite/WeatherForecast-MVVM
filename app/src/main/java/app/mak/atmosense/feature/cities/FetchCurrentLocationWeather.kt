@@ -1,5 +1,6 @@
 package app.mak.atmosense.feature.cities
 
+import app.mak.atmosense.core.common.model.AppResult
 import app.mak.atmosense.core.domain.repository.WeatherRepository
 import app.mak.atmosense.core.location.LocationAccessCoordinator
 import app.mak.atmosense.core.location.LocationAccessResult
@@ -11,9 +12,17 @@ class FetchCurrentLocationWeather(
   private val weatherRepository: WeatherRepository
 ) {
   suspend operator fun invoke() {
-    val result = locationCoordinator.resolveCurrentLocation()
-    if (result is LocationAccessResult.Available) {
-      weatherRepository.fetchCurrentWeather(result.coordinates)
+    val locationResult = locationCoordinator.resolveCurrentLocation()
+    if (locationResult is LocationAccessResult.Available) {
+      when (val weatherResult = weatherRepository.fetchCurrentWeather(locationResult.coordinates)) {
+        is AppResult.Success -> {
+          // Handle success
+        }
+
+        is AppResult.Failure -> {
+          // Handle failure
+        }
+      }
     }
   }
 }

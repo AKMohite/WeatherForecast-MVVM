@@ -8,5 +8,9 @@ data class SysDTO(
   @SerialName("sunrise")
   val sunrise: Int? = null,
   @SerialName("sunset")
-  val sunset: Int? = null
+  val sunset: Int? = null,
+  @SerialName("country")
+  val country: String? = null,
+  @SerialName("pod")
+  val pod: String? = null
 )

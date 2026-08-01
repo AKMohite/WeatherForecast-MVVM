@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WindDTO(
   @SerialName("deg")
-  val deg: Int? = null,
+  val degrees: Long? = null,
   @SerialName("gust")
   val gust: Double? = null,
   @SerialName("speed")

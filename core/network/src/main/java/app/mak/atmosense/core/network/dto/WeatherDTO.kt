@@ -8,9 +8,9 @@ data class WeatherDTO(
   @SerialName("description")
   val description: String? = null,
   @SerialName("icon")
-  val icon: String? = null,
+  val iconCode: String? = null,
   @SerialName("id")
-  val id: Int? = null,
+  val id: Long? = null,
   @SerialName("main")
   val main: String? = null
 )
