@@ -1,7 +1,7 @@
 package app.mak.atmosense.core.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object InstantAdapter : ColumnAdapter<Instant, Long> {
   override fun decode(databaseValue: Long): Instant {

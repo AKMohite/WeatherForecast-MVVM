@@ -1,5 +1,6 @@
 plugins {
   alias(libs.plugins.android.library)
+  alias(libs.plugins.metro)
   alias(libs.plugins.sqldelight)
 }
 
@@ -21,6 +22,7 @@ android {
 
 dependencies {
   implementation(libs.kotlinx.datetime)
+  implementation(libs.android.sql)
 }
 
 sqldelight {
