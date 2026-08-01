@@ -3,9 +3,9 @@ package app.mak.atmosense.core.database.dao.api
 import app.mak.atmosense.core.database.dao.CityEntity
 
 interface CityDAO {
-  suspend fun insert(city: CityEntity)
-  suspend fun getById(id: Long): CityEntity?
-  suspend fun getAll(): List<CityEntity>
-  suspend fun delete(id: Long)
-  suspend fun deleteAll()
+  fun insert(city: CityEntity)
+  fun getById(id: Long): CityEntity?
+  fun getAll(): List<CityEntity>
+  fun delete(id: Long)
+  fun deleteAll()
 }

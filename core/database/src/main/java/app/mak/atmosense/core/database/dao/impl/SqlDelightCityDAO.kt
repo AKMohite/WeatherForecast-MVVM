@@ -10,28 +10,28 @@ import dev.zacsweers.metro.SingleIn
 @SingleIn(AppScope::class)
 @ContributesBinding(scope = AppScope::class)
 class SqlDelightCityDAO(
-  private val db: AtmosenseDatabase
+  db: AtmosenseDatabase
 ) : CityDAO {
   private val query = db.cityQueries
-  override suspend fun insert(city: CityEntity) {
+  override fun insert(city: CityEntity) {
     query.insert(city)
   }
 
-  override suspend fun getById(id: Long): CityEntity? {
+  override fun getById(id: Long): CityEntity? {
     return query.getById(id)
       .executeAsOneOrNull()
   }
 
-  override suspend fun getAll(): List<CityEntity> {
+  override fun getAll(): List<CityEntity> {
     return query.getAll()
       .executeAsList()
   }
 
-  override suspend fun delete(id: Long) {
+  override fun delete(id: Long) {
     query.delete(id)
   }
 
-  override suspend fun deleteAll() {
+  override fun deleteAll() {
     query.deleteAll()
   }
 }

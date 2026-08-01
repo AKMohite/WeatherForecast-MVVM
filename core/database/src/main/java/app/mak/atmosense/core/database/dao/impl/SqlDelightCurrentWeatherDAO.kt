@@ -10,25 +10,25 @@ import dev.zacsweers.metro.SingleIn
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
 class SqlDelightCurrentWeatherDAO(
-  private val db: AtmosenseDatabase
+  db: AtmosenseDatabase
 ) : CurrentWeatherDAO {
 
   private val query = db.current_weatherQueries
 
-  override suspend fun insert(currentWeather: CurrentWeatherEntity) {
+  override fun insert(currentWeather: CurrentWeatherEntity) {
     query.insert(currentWeather)
   }
 
-  override suspend fun getByCityId(cityId: Long): CurrentWeatherEntity? {
+  override fun getByCityId(cityId: Long): CurrentWeatherEntity? {
     return query.getByCityId(cityId)
       .executeAsOneOrNull()
   }
 
-  override suspend fun deleteByCityId(cityId: Long) {
+  override fun deleteByCityId(cityId: Long) {
     query.deleteByCityId(cityId)
   }
 
-  override suspend fun deleteAll() {
+  override fun deleteAll() {
     query.deleteAll()
   }
 }

@@ -7,6 +7,7 @@ import app.mak.atmosense.core.data.mapper.toCityEntity
 import app.mak.atmosense.core.data.mapper.toCurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.api.CityDAO
 import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
+import app.mak.atmosense.core.database.dao.api.DatabaseTransaction
 import app.mak.atmosense.core.domain.repository.WeatherRepository
 import app.mak.atmosense.core.network.WeatherAPI
 import dev.zacsweers.metro.AppScope
@@ -19,7 +20,8 @@ import kotlin.time.Clock
 class DefaultWeatherRepository(
   private val weatherAPI: WeatherAPI,
   private val cityDAO: CityDAO,
-  private val currentWeatherDAO: CurrentWeatherDAO
+  private val currentWeatherDAO: CurrentWeatherDAO,
+  private val dbTransaction: DatabaseTransaction
 ) : WeatherRepository {
 
   override suspend fun fetchCurrentWeather(coordinates: LocationCoordinate): AppResult<Unit> {
@@ -31,8 +33,10 @@ class DefaultWeatherRepository(
       )
       val currentWeather = weatherAPI.getCurrentWeather(queries)
       val now = Clock.System.now()
-      cityDAO.insert(currentWeather.toCityEntity(now))
-      currentWeatherDAO.insert(currentWeather.toCurrentWeatherEntity(now))
+      dbTransaction {
+        cityDAO.insert(currentWeather.toCityEntity(now))
+        currentWeatherDAO.insert(currentWeather.toCurrentWeatherEntity(now))
+      }
       AppResult.Success(Unit)
     } catch (t: Throwable) {
       AppResult.Failure(exception = t.toAppException())
