@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -97,7 +98,9 @@ private fun EmptyContent(
   }
   Column(
     modifier = Modifier
-      .padding(horizontal = 12.dp)
+      .fillMaxSize()
+      .padding(horizontal = 12.dp),
+    verticalArrangement = Arrangement.Center
   ) {
     Button(
       modifier = Modifier.fillMaxWidth(),

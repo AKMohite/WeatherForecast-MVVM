@@ -23,11 +23,6 @@ class CityManagementPresenter(
   override fun present(): CityManagementScreen.State {
     val cities = "emptyList<String>()"
     val scope = rememberCoroutineScope()
-//    LaunchedEffect(Unit) {
-//      scope.launch {
-//        fetchCurrentLocationWeather()
-//      }
-//    }
     val eventSink: (CityManagementScreen.Event) -> Unit = { event ->
       when (event) {
         CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
