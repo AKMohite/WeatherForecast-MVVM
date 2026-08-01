@@ -1,5 +1,6 @@
 plugins {
   alias(libs.plugins.android.library)
+  alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -18,4 +19,14 @@ android {
 
 }
 
-dependencies {}
+dependencies {
+
+}
+
+sqldelight {
+  databases {
+    register("AtmosenseDatabase") {
+      packageName.set("app.mak.atmosense.core.database")
+    }
+  }
+}

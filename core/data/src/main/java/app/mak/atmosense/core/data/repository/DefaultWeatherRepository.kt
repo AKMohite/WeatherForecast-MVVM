@@ -21,7 +21,7 @@ class DefaultWeatherRepository(
         "lon" to coordinates.longitude.toString(),
         "unit" to "metric"
       )
-      weatherAPI.getCurrentWeather(queries)
+      val currentWeather = weatherAPI.getCurrentWeather(queries)
     } catch (t: Throwable) {
       if (t is CancellationException) throw t
     }

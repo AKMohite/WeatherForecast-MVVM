@@ -1,0 +1,23 @@
+CREATE TABLE cityEntity (
+  id INTEGER PRIMARY KEY NOT NULL,
+  country_code TEXT NOT NULL,
+  name TEXT NOT NULL,
+  latitude TEXT NOT NULL,
+  longitude TEXT NOT NULL,
+  added_at TEXT NOT NULL
+);
+
+insert:
+INSERT OR REPLACE INTO cityEntity (id, country_code, name, latitude, longitude, added_at) VALUES ?;
+
+getById:
+SELECT * FROM cityEntity WHERE id = :id;
+
+getAll:
+SELECT * FROM cityEntity;
+
+delete:
+DELETE FROM cityEntity WHERE id = :id;
+
+deleteAll:
+DELETE FROM cityEntity;
