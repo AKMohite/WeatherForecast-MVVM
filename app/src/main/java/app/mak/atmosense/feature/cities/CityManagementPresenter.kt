@@ -1,11 +1,8 @@
 package app.mak.atmosense.feature.cities
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import app.mak.atmosense.core.domain.repository.WeatherRepository
-import app.mak.atmosense.core.location.LocationAccessCoordinator
 import app.mak.atmosense.feature.search.SearchScreen
 import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -20,15 +17,17 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class CityManagementPresenter(
   @Assisted private val navigator: Navigator,
-  private val weatherRepository: WeatherRepository,
-  private val locationAccessCoordinator: LocationAccessCoordinator,
+  private val fetchCurrentLocationWeather: FetchCurrentLocationWeather
 ) : Presenter<CityManagementScreen.State> {
 
   @Composable
   override fun present(): CityManagementScreen.State {
+    val cities = "emptyList<String>()"
     val scope = rememberCoroutineScope()
-    val cities by produceState("Empty String") {
-      value = weatherRepository.getCurrentWeather()
+    LaunchedEffect(Unit) {
+      scope.launch {
+        fetchCurrentLocationWeather()
+      }
     }
     return CityManagementScreen.State(
       dummy = cities,
@@ -38,8 +37,7 @@ class CityManagementPresenter(
           is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
           CityManagementScreen.Event.FetchCurrentLocationWeather -> {
             scope.launch {
-              val result = locationAccessCoordinator.resolveCurrentLocation()
-              println(result)
+              fetchCurrentLocationWeather()
             }
           }
 
