@@ -1,10 +1,12 @@
+import kotlinx.datetime.Instant;
+
 CREATE TABLE cityEntity (
   id INTEGER PRIMARY KEY NOT NULL,
   country_code TEXT NOT NULL,
   name TEXT NOT NULL,
   latitude TEXT NOT NULL,
   longitude TEXT NOT NULL,
-  added_at TEXT NOT NULL
+  added_at INTEGER AS Instant NOT NULL
 );
 
 insert:
