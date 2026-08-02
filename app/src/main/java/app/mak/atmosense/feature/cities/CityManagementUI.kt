@@ -36,10 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import app.mak.atmosense.R
 import app.mak.atmosense.core.common.model.CityWeather
+import app.mak.atmosense.ui.theme.AtmosenseTheme
 import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
@@ -190,7 +194,8 @@ private fun EmptyContent(
     modifier = Modifier
       .fillMaxSize()
       .padding(horizontal = 24.dp),
-    verticalArrangement = Arrangement.Center
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Text(
       text = stringResource(R.string.no_cities_found),
@@ -226,3 +231,61 @@ private fun EmptyContent(
   }
 }
 
+
+private class CityManagementStateParameterProvider :
+  PreviewParameterProvider<CityManagementScreen.State> {
+  override val values: Sequence<CityManagementScreen.State> = sequenceOf(
+    CityManagementScreen.State.Loading,
+    CityManagementScreen.State.Empty,
+    CityManagementScreen.State.Success(
+      cities = listOf(
+        CityWeather(
+          cityId = 1,
+          cityName = "New York",
+          countryCode = "US",
+          temperature = 25.0,
+          feelsLike = 27.0,
+          weatherIcon = "app:://atmosense.com/img/01d@2x.png",
+          weatherDescription = "Clear sky",
+          fetchedBefore = "10 mins ago"
+        ),
+        CityWeather(
+          cityId = 2,
+          cityName = "London",
+          countryCode = "GB",
+          temperature = 18.0,
+          feelsLike = 17.0,
+          weatherIcon = "app:://atmosense.com/img/09d@2x.png",
+          weatherDescription = "Light rain",
+          fetchedBefore = "20 mins ago"
+        ),
+        CityWeather(
+          cityId = 3,
+          cityName = "Tokyo",
+          countryCode = "JP",
+          temperature = 30.0,
+          feelsLike = 35.0,
+          weatherIcon = "app:://atmosense.com/img/11d@2x.png",
+          weatherDescription = "Thunderstorm",
+          fetchedBefore = "5 mins ago"
+        )
+      ),
+      eventSink = {}
+    ),
+    CityManagementScreen.State.Error(message = "Failed to load weather data. Please try again.")
+  )
+
+  override fun getDisplayName(index: Int): String? {
+    return super.getDisplayName(index)
+  }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CityManagementUIPreview(
+  @PreviewParameter(CityManagementStateParameterProvider::class) state: CityManagementScreen.State
+) {
+  AtmosenseTheme {
+    CityManagementUI(state = state)
+  }
+}
