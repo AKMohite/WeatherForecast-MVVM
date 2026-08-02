@@ -3,10 +3,12 @@ package app.mak.atmosense.core.data.repository
 import app.mak.atmosense.core.common.model.AppResult
 import app.mak.atmosense.core.common.model.CityWeather
 import app.mak.atmosense.core.common.model.LocationCoordinate
+import app.mak.atmosense.core.common.model.SearchCity
 import app.mak.atmosense.core.data.mapper.toAppException
 import app.mak.atmosense.core.data.mapper.toCityEntity
 import app.mak.atmosense.core.data.mapper.toCityWeather
 import app.mak.atmosense.core.data.mapper.toCurrentWeatherEntity
+import app.mak.atmosense.core.data.mapper.toSearchCities
 import app.mak.atmosense.core.database.dao.api.CityDAO
 import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
 import app.mak.atmosense.core.database.dao.api.DatabaseTransaction
@@ -42,6 +44,20 @@ class DefaultWeatherRepository(
         currentWeatherDAO.insert(currentWeather.toCurrentWeatherEntity(now))
       }
       AppResult.Success(Unit)
+    } catch (t: Throwable) {
+      AppResult.Failure(exception = t.toAppException())
+    }
+  }
+
+  override suspend fun searchCities(query: String): AppResult<List<SearchCity>> {
+    return try {
+      val queries = mapOf(
+        "q" to query,
+        "limit" to "10",
+      )
+      val locations = weatherAPI.searchLocations(queries)
+      val searchResults = locations.toSearchCities()
+      AppResult.Success(searchResults)
     } catch (t: Throwable) {
       AppResult.Failure(exception = t.toAppException())
     }

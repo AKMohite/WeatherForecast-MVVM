@@ -56,7 +56,6 @@ internal fun CityManagementUI(
   modifier: Modifier = Modifier
 ) {
   val snackbarHostState = SnackbarHostState()
-  val eventSink: (CityManagementScreen.Event) -> Unit = {}
   Scaffold(
     snackbarHost = { SnackbarHost(snackbarHostState) }
   ) { paddingValues ->
@@ -66,8 +65,8 @@ internal fun CityManagementUI(
         .padding(vertical = paddingValues.calculateTopPadding()),
     ) {
       when (state) {
-        CityManagementScreen.State.Empty -> EmptyContent(
-          event = eventSink,
+        is CityManagementScreen.State.Empty -> EmptyContent(
+          event = state.eventSink,
           snackbarHostState = snackbarHostState
         )
 
@@ -82,7 +81,7 @@ internal fun CityManagementUI(
         is CityManagementScreen.State.Success -> WeatherForCitiesContent(
           cities = state.cities,
           onCityClick = { id ->
-            eventSink(CityManagementScreen.Event.Details(id))
+            state.eventSink(CityManagementScreen.Event.Details(id))
           }
         )
       }
@@ -236,7 +235,7 @@ private class CityManagementStateParameterProvider :
   PreviewParameterProvider<CityManagementScreen.State> {
   override val values: Sequence<CityManagementScreen.State> = sequenceOf(
     CityManagementScreen.State.Loading,
-    CityManagementScreen.State.Empty,
+    CityManagementScreen.State.Empty({}),
     CityManagementScreen.State.Success(
       cities = listOf(
         CityWeather(

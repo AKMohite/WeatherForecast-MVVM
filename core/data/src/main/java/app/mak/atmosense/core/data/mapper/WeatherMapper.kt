@@ -1,10 +1,25 @@
 package app.mak.atmosense.core.data.mapper
 
 import app.mak.atmosense.core.common.model.CityWeather
+import app.mak.atmosense.core.common.model.SearchCity
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.GetCitiesWeather
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
+import app.mak.atmosense.core.network.dto.LocationDTO
 import kotlin.time.Instant
+
+
+internal fun List<LocationDTO>.toSearchCities(): List<SearchCity> {
+  return map { location ->
+    SearchCity(
+      country = location.country.orEmpty(),
+      latitude = location.lat ?: 0.0,
+      longitude = location.lon ?: 0.0,
+      name = location.name.orEmpty(),
+      state = location.state.orEmpty()
+    )
+  }
+}
 
 internal fun CurrentWeatherDTO.toCurrentWeatherEntity(now: Instant): CurrentWeatherEntity {
   val primaryCondition = weather?.firstOrNull() ?: error("No primary condition")

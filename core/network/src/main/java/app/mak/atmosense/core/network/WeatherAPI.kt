@@ -1,6 +1,7 @@
 package app.mak.atmosense.core.network
 
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
+import app.mak.atmosense.core.network.dto.LocationDTO
 import app.mak.atmosense.core.network.utils.safeApiCall
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -11,6 +12,7 @@ import io.ktor.client.request.get
 
 interface WeatherAPI {
   suspend fun getCurrentWeather(queries: Map<String, String>): CurrentWeatherDTO
+  suspend fun searchLocations(queries: Map<String, String>): List<LocationDTO>
 }
 
 @ContributesBinding(scope = AppScope::class)
@@ -22,6 +24,13 @@ class OpenWeatherMapAPI(
     return safeApiCall {
       val queries = getAllQueries(queries)
       httpClient.get("/data/2.5/weather?$queries").body<CurrentWeatherDTO>()
+    }
+  }
+
+  override suspend fun searchLocations(queries: Map<String, String>): List<LocationDTO> {
+    return safeApiCall {
+      val queries = getAllQueries(queries)
+      httpClient.get("/geo/1.0/direct?$queries").body<List<LocationDTO>>()
     }
   }
 

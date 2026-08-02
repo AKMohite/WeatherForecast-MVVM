@@ -11,7 +11,9 @@ data object CityManagementScreen : Screen {
 
   sealed interface State : CircuitUiState {
     data object Loading : State
-    data object Empty : State
+    data class Empty(
+      val eventSink: (Event) -> Unit
+    ) : State
     data class Success(
       val cities: List<CityWeather>,
       val eventSink: (Event) -> Unit

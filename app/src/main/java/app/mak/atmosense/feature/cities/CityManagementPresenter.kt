@@ -32,25 +32,37 @@ class CityManagementPresenter(
       }
     }
     val scope = rememberCoroutineScope()
-    val eventSink: (CityManagementScreen.Event) -> Unit = { event ->
-      when (event) {
-        CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
-        is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
-        CityManagementScreen.Event.FetchCurrentLocationWeather -> {
-          scope.launch {
-            fetchCurrentLocationWeather()
-          }
-        }
-
-        CityManagementScreen.Event.OpenAppSettings -> {}
-      }
-    }
     return when {
       weatherForCities == null -> CityManagementScreen.State.Loading
-      weatherForCities.isNullOrEmpty() -> CityManagementScreen.State.Empty
+      weatherForCities.isNullOrEmpty() -> CityManagementScreen.State.Empty(
+        eventSink = { event ->
+          when (event) {
+            CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
+            CityManagementScreen.Event.FetchCurrentLocationWeather -> {
+              scope.launch {
+                fetchCurrentLocationWeather()
+              }
+            }
+
+            else -> {}
+          }
+        }
+      )
       else -> CityManagementScreen.State.Success(
         weatherForCities ?: error("Invalid state cities are null: $weatherForCities"),
-        eventSink
+        eventSink = { event ->
+          when (event) {
+            CityManagementScreen.Event.SearchLocation -> navigator.goTo(SearchScreen)
+            is CityManagementScreen.Event.Details -> navigator.goTo(WeatherDetailsScreen(event.cityId))
+            CityManagementScreen.Event.FetchCurrentLocationWeather -> {
+              scope.launch {
+                fetchCurrentLocationWeather()
+              }
+            }
+
+            CityManagementScreen.Event.OpenAppSettings -> {}
+          }
+        }
       )
     }
   }
