@@ -1,5 +1,6 @@
 package app.mak.atmosense.feature.cities
 
+import app.mak.atmosense.core.common.model.CityWeather
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -12,7 +13,7 @@ data object CityManagementScreen : Screen {
     data object Loading : State
     data object Empty : State
     data class Success(
-      val dummy: String,
+      val cities: List<CityWeather>,
       val eventSink: (Event) -> Unit
     ) : State
 

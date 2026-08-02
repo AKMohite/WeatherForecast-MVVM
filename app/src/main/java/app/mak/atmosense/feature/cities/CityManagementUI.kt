@@ -5,7 +5,9 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -24,6 +31,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,6 +39,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import app.mak.atmosense.R
+import app.mak.atmosense.core.common.model.CityWeather
+import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.launch
@@ -45,16 +55,95 @@ internal fun CityManagementUI(
   val eventSink: (CityManagementScreen.Event) -> Unit = {}
   Scaffold(
     snackbarHost = { SnackbarHost(snackbarHostState) }
-  ) {
-    Column(
+  ) { paddingValues ->
+    Box(
       modifier = modifier
-        .padding(vertical = it.calculateTopPadding()),
-      verticalArrangement = Arrangement.Center
+        .fillMaxSize()
+        .padding(vertical = paddingValues.calculateTopPadding()),
     ) {
-      EmptyContent(
-        event = eventSink,
-        snackbarHostState = snackbarHostState
+      when (state) {
+        CityManagementScreen.State.Empty -> EmptyContent(
+          event = eventSink,
+          snackbarHostState = snackbarHostState
+        )
+
+        is CityManagementScreen.State.Error -> {
+          Text(text = state.message)
+        }
+
+        CityManagementScreen.State.Loading -> CircularProgressIndicator(
+          modifier = Modifier.align(Alignment.Center)
+        )
+
+        is CityManagementScreen.State.Success -> WeatherForCitiesContent(
+          cities = state.cities,
+          onCityClick = { id ->
+            eventSink(CityManagementScreen.Event.Details(id))
+          }
+        )
+      }
+    }
+  }
+}
+
+@Composable
+private fun WeatherForCitiesContent(
+  cities: List<CityWeather>,
+  onCityClick: (Long) -> Unit
+) {
+  LazyColumn(
+    modifier = Modifier
+      .fillMaxSize()
+  ) {
+    items(items = cities, key = { city -> city.cityId }) { city ->
+      WeatherForCityUI(
+        city = city,
+        onCityClick = onCityClick
       )
+    }
+  }
+}
+
+@Composable
+fun WeatherForCityUI(
+  city: CityWeather,
+  modifier: Modifier = Modifier,
+  onCityClick: (Long) -> Unit
+) {
+  Card(
+    modifier = modifier
+      .fillMaxWidth()
+      .padding(8.dp),
+    onClick = { onCityClick(city.cityId) }
+  ) {
+    Row(
+      modifier = modifier
+        .fillMaxWidth()
+        .padding(12.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      AsyncImage(
+        modifier = Modifier
+          .size(48.dp),
+        model = city.weatherIcon,
+        contentDescription = city.weatherDescription
+      )
+      Column {
+        Text(
+          text = city.cityName,
+          style = MaterialTheme.typography.bodyLarge
+        )
+        Text(
+          text = city.weatherDescription,
+          style = MaterialTheme.typography.bodySmall
+        )
+      }
+      Spacer(Modifier.weight(1f))
+      Text(
+        text = stringResource(R.string.temperature, city.temperature),
+        style = MaterialTheme.typography.titleMedium
+      )
+
     }
   }
 }
@@ -100,9 +189,19 @@ private fun EmptyContent(
   Column(
     modifier = Modifier
       .fillMaxSize()
-      .padding(horizontal = 12.dp),
+      .padding(horizontal = 24.dp),
     verticalArrangement = Arrangement.Center
   ) {
+    Text(
+      text = stringResource(R.string.no_cities_found),
+      style = MaterialTheme.typography.titleLarge
+    )
+    Spacer(Modifier.height(8.dp))
+    Text(
+      text = stringResource(R.string.no_cities_found_description),
+      style = MaterialTheme.typography.bodyMedium
+    )
+    Spacer(Modifier.height(16.dp))
     Button(
       modifier = Modifier.fillMaxWidth(),
       onClick = { event(CityManagementScreen.Event.SearchLocation) }

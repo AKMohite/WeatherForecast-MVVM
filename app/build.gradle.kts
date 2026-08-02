@@ -58,6 +58,8 @@ dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.ktx)
   implementation(libs.circuit.foundation)
+  implementation(libs.coil.compose)
+  implementation(libs.coil.network.okhttp)
   api(libs.circuit.codegen.annotations)
   ksp(libs.circuit.codegen)
   testImplementation(libs.junit)

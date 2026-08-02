@@ -1,7 +1,10 @@
 package app.mak.atmosense.feature.cities
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
+import app.mak.atmosense.core.common.model.CityWeather
 import app.mak.atmosense.core.domain.usecase.ObserveCitiesWeather
 import app.mak.atmosense.feature.search.SearchScreen
 import app.mak.atmosense.feature.weatherdetails.WeatherDetailsScreen
@@ -23,7 +26,11 @@ class CityManagementPresenter(
 
   @Composable
   override fun present(): CityManagementScreen.State {
-    val cities: String? = "emptyList<String>()"
+    val weatherForCities by produceState<List<CityWeather>?>(null) {
+      observeCitiesWeather().collect { cities ->
+        value = cities
+      }
+    }
     val scope = rememberCoroutineScope()
     val eventSink: (CityManagementScreen.Event) -> Unit = { event ->
       when (event) {
@@ -39,9 +46,12 @@ class CityManagementPresenter(
       }
     }
     return when {
-      cities == null -> CityManagementScreen.State.Loading
-      cities.isEmpty() -> CityManagementScreen.State.Empty
-      else -> CityManagementScreen.State.Success(cities, eventSink)
+      weatherForCities == null -> CityManagementScreen.State.Loading
+      weatherForCities.isNullOrEmpty() -> CityManagementScreen.State.Empty
+      else -> CityManagementScreen.State.Success(
+        weatherForCities ?: error("Invalid state cities are null: $weatherForCities"),
+        eventSink
+      )
     }
   }
 

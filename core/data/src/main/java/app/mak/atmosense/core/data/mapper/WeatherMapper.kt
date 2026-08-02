@@ -1,6 +1,8 @@
 package app.mak.atmosense.core.data.mapper
 
+import app.mak.atmosense.core.common.model.CityWeather
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
+import app.mak.atmosense.core.database.dao.GetCitiesWeather
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
 import kotlin.time.Instant
 
@@ -20,4 +22,21 @@ internal fun CurrentWeatherDTO.toCurrentWeatherEntity(now: Instant): CurrentWeat
     condition_icon_code = primaryCondition.iconCode.orEmpty(),
     fetched_at = now,
   )
+}
+
+internal fun String?.weatherImage() = "https://openweathermap.org/img/wn/$this@2x.png"
+
+internal fun List<GetCitiesWeather>.toCityWeather(): List<CityWeather> {
+  return map { weather ->
+    CityWeather(
+      cityId = weather.city_id,
+      cityName = weather.name,
+      countryCode = weather.country_code,
+      temperature = weather.temperature,
+      feelsLike = weather.feels_like,
+      weatherIcon = weather.condition_icon_code.weatherImage(),
+      weatherDescription = weather.condition_description,
+      fetchedBefore = weather.fetched_at.toString()
+    )
+  }
 }

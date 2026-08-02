@@ -1,9 +1,11 @@
 package app.mak.atmosense.core.data.repository
 
 import app.mak.atmosense.core.common.model.AppResult
+import app.mak.atmosense.core.common.model.CityWeather
 import app.mak.atmosense.core.common.model.LocationCoordinate
 import app.mak.atmosense.core.data.mapper.toAppException
 import app.mak.atmosense.core.data.mapper.toCityEntity
+import app.mak.atmosense.core.data.mapper.toCityWeather
 import app.mak.atmosense.core.data.mapper.toCurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.api.CityDAO
 import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
@@ -45,10 +47,10 @@ class DefaultWeatherRepository(
     }
   }
 
-  override fun observeCitiesWeather(): Flow<List<String>> {
+  override fun observeCitiesWeather(): Flow<List<CityWeather>> {
     return currentWeatherDAO.observeCitiesWeather()
-      .map {
-        listOf(it.toString())
+      .map { weatherForCities ->
+        weatherForCities.toCityWeather()
       }
   }
 }
