@@ -11,4 +11,6 @@ interface WeatherRepository {
 
   suspend fun searchCities(query: String): AppResult<List<SearchCity>>
   fun observeCitiesWeather(): Flow<List<CityWeather>>
+  suspend fun fetchCurrentWeatherForCity(cityId: Long): AppResult<Unit>
+  suspend fun fetchForecastWeatherForCity(cityId: Long): AppResult<Unit>
 }

@@ -1,6 +1,7 @@
 package app.mak.atmosense.feature.weatherdetails
 
 import androidx.compose.runtime.Composable
+import app.mak.atmosense.core.domain.usecase.RefreshWeatherDetails
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -12,7 +13,8 @@ import dev.zacsweers.metro.AssistedInject
 @AssistedInject
 class WeatherDetailsPresenter(
   @Assisted private val screen: WeatherDetailsScreen,
-  @Assisted private val navigator: Navigator
+  @Assisted private val navigator: Navigator,
+  private val refreshWeatherDetails: RefreshWeatherDetails
 ) : Presenter<WeatherDetailsScreen.State> {
   @Composable
   override fun present(): WeatherDetailsScreen.State {

@@ -1,10 +1,13 @@
 package app.mak.atmosense.core.data.mapper
 
 import app.mak.atmosense.core.common.model.CityWeather
+import app.mak.atmosense.core.common.model.ForecastSlot
 import app.mak.atmosense.core.common.model.SearchCity
+import app.mak.atmosense.core.common.model.WeatherCondition
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.GetCitiesWeather
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
+import app.mak.atmosense.core.network.dto.HourlyDTO
 import app.mak.atmosense.core.network.dto.LocationDTO
 import kotlin.time.Instant
 
@@ -55,3 +58,29 @@ internal fun List<GetCitiesWeather>.toCityWeather(): List<CityWeather> {
     )
   }
 }
+
+
+internal fun List<HourlyDTO>.toForecast(cityId: Long): List<ForecastSlot> {
+  return mapNotNull {
+    it.domain(cityId)
+  }
+}
+
+private fun HourlyDTO.domain(cityId: Long): ForecastSlot {
+  val primaryCondition = weather?.firstOrNull()?.let {
+    WeatherCondition(
+      id = it.id ?: 0, main = it.main.orEmpty(),
+      description = it.description.orEmpty(), iconCode = it.iconCode.orEmpty(),
+    )
+  }
+  return ForecastSlot(
+    cityId = cityId,
+    timestamp = Instant.fromEpochSeconds(dt ?: 0),
+    temperature = main?.temperature ?: 0.0,
+    condition = primaryCondition,
+    precipitationProbability = pop ?: 0.0,
+    windSpeed = wind?.speed ?: 0.0,
+  )
+}
+
+
