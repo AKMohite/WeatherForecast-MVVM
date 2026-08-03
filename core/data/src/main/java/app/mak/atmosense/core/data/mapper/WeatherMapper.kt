@@ -5,6 +5,7 @@ import app.mak.atmosense.core.common.model.ForecastSlot
 import app.mak.atmosense.core.common.model.SearchCity
 import app.mak.atmosense.core.common.model.WeatherCondition
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
+import app.mak.atmosense.core.database.dao.ForecastWeatherEntity
 import app.mak.atmosense.core.database.dao.GetCitiesWeather
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
 import app.mak.atmosense.core.network.dto.HourlyDTO
@@ -80,6 +81,21 @@ private fun HourlyDTO.domain(cityId: Long): ForecastSlot {
     condition = primaryCondition,
     precipitationProbability = pop ?: 0.0,
     windSpeed = wind?.speed ?: 0.0,
+  )
+}
+
+internal fun ForecastSlot.toForecastEntity(now: Instant): ForecastWeatherEntity {
+  return ForecastWeatherEntity(
+    id = 0L,
+    city_id = cityId,
+    forecast_timestamp = timestamp,
+    temperature = temperature,
+    condition_id = condition?.id ?: 0,
+    condition_main = condition?.main.orEmpty(),
+    icon_code = condition?.iconCode.orEmpty(),
+    precipitation_probability = precipitationProbability,
+    wind_speed = windSpeed,
+    fetched_at = now
   )
 }
 

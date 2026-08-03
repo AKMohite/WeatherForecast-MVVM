@@ -7,6 +7,8 @@ import app.mak.atmosense.core.database.AtmosenseDatabase
 import app.mak.atmosense.core.database.adapter.InstantAdapter
 import app.mak.atmosense.core.database.dao.CityEntity
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
+import app.mak.atmosense.core.database.dao.ForecastWeatherEntity
+import app.mak.atmosense.core.database.dao.SyncEntity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -35,6 +37,14 @@ interface DatabaseProviders {
       ),
       currentWeatherEntityAdapter = CurrentWeatherEntity.Adapter(
         fetched_atAdapter = InstantAdapter
+      ),
+      forecastWeatherEntityAdapter = ForecastWeatherEntity.Adapter(
+        forecast_timestampAdapter = InstantAdapter,
+        fetched_atAdapter = InstantAdapter
+      ),
+      syncEntityAdapter = SyncEntity.Adapter(
+        last_attempt_atAdapter = InstantAdapter,
+        last_success_atAdapter = InstantAdapter
       )
     )
   }

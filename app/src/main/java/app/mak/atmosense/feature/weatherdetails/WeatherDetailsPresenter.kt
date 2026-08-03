@@ -1,6 +1,7 @@
 package app.mak.atmosense.feature.weatherdetails
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import app.mak.atmosense.core.domain.usecase.RefreshWeatherDetails
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -18,6 +19,9 @@ class WeatherDetailsPresenter(
 ) : Presenter<WeatherDetailsScreen.State> {
   @Composable
   override fun present(): WeatherDetailsScreen.State {
+    LaunchedEffect(Unit) {
+      refreshWeatherDetails(screen.cityId)
+    }
     return WeatherDetailsScreen.State(screen.cityId)
   }
 
