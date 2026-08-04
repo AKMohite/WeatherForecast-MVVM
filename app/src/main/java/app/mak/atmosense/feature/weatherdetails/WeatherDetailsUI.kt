@@ -183,7 +183,7 @@ private fun DetailsSection(weather: CityWeather?) {
             contentDescription = null,
             modifier = Modifier
               .size(24.dp)
-              .rotate(weather.windDegrees.toFloat() + 90f)
+              .rotate(weather.windDegrees.toFloat())
           )
         }
       }
