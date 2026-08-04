@@ -1,46 +1,77 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM).
+# Atmosense
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Atmosense is a modern Android weather application built with a focus on Clean Architecture,
+multi-module structure, and the latest Jetpack Compose technologies.
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+## 🚀 Features
 
-### Running the apps
+- Current weather information based on location or search.
+- 5-day / 3-hour weather forecast.
+- City management and search functionality.
+- Offline support using SQLDelight.
+- Modern UI with Jetpack Compose and Material 3.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## 🏗️ Architecture
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
-- Web app:
-  - Wasm target (faster, modern browsers): `./gradlew :webApp:wasmJsBrowserDevelopmentRun`
-  - JS target (slower, supports older browsers): `./gradlew :webApp:jsBrowserDevelopmentRun`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+The project follows a **Multi-module Clean Architecture** approach to ensure scalability,
+testability, and separation of concerns.
 
-### Running tests
+### Module Breakdown
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+- **`:app`**: The main entry point, containing the DI root and UI implementation.
+- **`:core:domain`**: Pure Kotlin module containing Business Logic, Entities, and Use Cases.
+- **`:core:data`**: Implementation of repositories, handling data orchestration between network and
+  database.
+- **`:core:network`**: Ktor-based networking layer for fetching data from OpenWeatherMap.
+- **`:core:database`**: SQLDelight-based local persistence layer.
+- **`:core:location`**: Service for handling device location updates.
+- **`:core:common`**: Shared utilities and base classes used across modules.
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- Desktop tests: `./gradlew :shared:jvmTest`
-- Web tests:
-  - Wasm target: `./gradlew :shared:wasmJsTest`
-  - JS target: `./gradlew :shared:jsTest`
-- iOS tests: `./gradlew :shared:iosSimulatorArm64Test`
+### Tech Stack
 
----
+- **UI**: [Jetpack Compose](https://developer.android.com/jetpack/compose) with Material 3.
+- **Navigation & State**: [Circuit](https://github.com/slackhq/circuit) for MVI-inspired
+  architecture and navigation.
+- **DI**: [Metro](https://github.com/zsweers/metro) for compile-time dependency injection.
+- **Networking**: [Ktor](https://ktor.io/) for asynchronous HTTP requests.
+- **Database**: [SQLDelight](https://cashapp.github.io/sqldelight/) for type-safe SQLite database.
+- **Concurrency**: Kotlin Coroutines & Flow.
+- **Date/Time**: `kotlinx-datetime`.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## 🛠️ Setup & Installation
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+### Prerequisites
+
+- **Android Studio Ladybug (2024.2.1)** or newer.
+- **JDK 21**.
+
+### API Key Configuration
+
+This app uses the **OpenWeatherMap API**. To run the project, you need to provide your own API key:
+
+1. Sign up at [OpenWeatherMap](https://openweathermap.org/api) to get a free API key.
+2. Add the key to your global `gradle.properties` file:
+
+- **Windows**: `C:\Users\<YourUser>\.gradle\gradle.properties`
+- **macOS/Linux**: `~/.gradle/gradle.properties`
+
+3. Add the following line:
+   ```properties
+   OWM_API_KEY=your_api_key_here
+   ```
+   *Alternatively, you can add it to the project's root `gradle.properties` file.*
+
+### Build & Run
+
+1. Clone the repository.
+2. Open the project in Android Studio.
+3. Wait for Gradle sync to complete.
+4. Run the `app` module on an emulator or physical device.
+
+## 📝 Assumptions & Notes
+
+- **API Usage**: The app assumes a valid OpenWeatherMap 2.5 API key. Note that some endpoints might
+  require specific subscription tiers if using newer API versions (e.g., OneCall 3.0).
+- **Permissions**: The app requires `ACCESS_COARSE_LOCATION` or `ACCESS_FINE_LOCATION` for local
+  weather and `INTERNET` access.
+- **Device Support**: Optimized for Android 11 (API 30) and above, with a minimum SDK of 24.
