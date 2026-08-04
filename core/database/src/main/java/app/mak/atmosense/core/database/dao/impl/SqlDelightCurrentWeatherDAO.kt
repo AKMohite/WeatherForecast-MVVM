@@ -2,6 +2,7 @@ package app.mak.atmosense.core.database.dao.impl
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOneNotNull
 import app.mak.atmosense.core.database.AtmosenseDatabase
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.GetCitiesWeather
@@ -41,5 +42,11 @@ class SqlDelightCurrentWeatherDAO(
     return query.getCitiesWeather()
       .asFlow()
       .mapToList(Dispatchers.IO)
+  }
+
+  override fun observeCityCurrentWeather(cityId: Long): Flow<CurrentWeatherEntity?> {
+    return query.getByCityId(cityId)
+      .asFlow()
+      .mapToOneNotNull(Dispatchers.IO)
   }
 }

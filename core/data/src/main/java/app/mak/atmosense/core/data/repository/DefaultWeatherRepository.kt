@@ -4,6 +4,7 @@ import app.mak.atmosense.core.common.model.AppError
 import app.mak.atmosense.core.common.model.AppException
 import app.mak.atmosense.core.common.model.AppResult
 import app.mak.atmosense.core.common.model.CityWeather
+import app.mak.atmosense.core.common.model.ForecastSlot
 import app.mak.atmosense.core.common.model.LocationCoordinate
 import app.mak.atmosense.core.common.model.SearchCity
 import app.mak.atmosense.core.common.model.SyncRequestType
@@ -14,6 +15,7 @@ import app.mak.atmosense.core.data.mapper.toCurrentWeatherEntity
 import app.mak.atmosense.core.data.mapper.toForecast
 import app.mak.atmosense.core.data.mapper.toForecastEntity
 import app.mak.atmosense.core.data.mapper.toSearchCities
+import app.mak.atmosense.core.data.mapper.toWeatherCity
 import app.mak.atmosense.core.database.dao.SyncEntity
 import app.mak.atmosense.core.database.dao.api.CityDAO
 import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
@@ -28,6 +30,9 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Instant
 
 @ContributesBinding(scope = AppScope::class)
 @Inject
@@ -80,20 +85,40 @@ class DefaultWeatherRepository(
     }
   }
 
-  override suspend fun fetchCurrentWeatherForCity(cityId: Long): AppResult<Unit> {
+  override suspend fun fetchCurrentWeatherForCity(
+    isForceRefresh: Boolean,
+    cityId: Long
+  ): AppResult<Unit> {
     val city = cityDAO.getById(cityId) ?: throw AppException(
       AppError.EntityNotFound,
       Throwable("City not found")
     )
+    if (!isForceRefresh) {
+      val syncEntity = syncDAO.getSyncStatus(cityId, SyncRequestType.CurrentWeather.name)
+      val lastSyncedAt = syncEntity?.last_success_at
+      if (lastSyncedAt != null && isRequestValid(lastSyncedAt, 1.hours)) {
+        return AppResult.Success(Unit)
+      }
+    }
     val coordinates = LocationCoordinate(city.latitude, city.longitude)
     return fetchCurrentWeather(coordinates)
   }
 
-  override suspend fun fetchForecastWeatherForCity(cityId: Long): AppResult<Unit> {
+  override suspend fun fetchForecastWeatherForCity(
+    isForceRefresh: Boolean,
+    cityId: Long
+  ): AppResult<Unit> {
     val city = cityDAO.getById(cityId) ?: throw AppException(
       AppError.EntityNotFound,
       Throwable("City not found")
     )
+    if (!isForceRefresh) {
+      val syncEntity = syncDAO.getSyncStatus(cityId, SyncRequestType.ForecastWeather.name)
+      val lastSyncedAt = syncEntity?.last_success_at
+      if (lastSyncedAt != null && isRequestValid(lastSyncedAt, 1.hours)) {
+        return AppResult.Success(Unit)
+      }
+    }
     val coordinates = LocationCoordinate(city.latitude, city.longitude)
     return fetchForecastWeather(cityId, coordinates)
   }
@@ -134,5 +159,20 @@ class DefaultWeatherRepository(
         weatherForCities.toCityWeather()
       }
   }
+
+  override fun observeCityForecastWeather(cityId: Long): Flow<List<ForecastSlot>> {
+    return forecastWeatherDAO.observeForecastByCityId(cityId)
+      .map { it.toForecast() }
+  }
+
+  override fun observeCityCurrentWeather(cityId: Long): Flow<CityWeather?> {
+    return currentWeatherDAO.observeCityCurrentWeather(cityId)
+      .map { it.toWeatherCity() }
+  }
+
+  private fun isRequestValid(
+    lastSyncedAt: Instant,
+    duration: Duration,
+  ): Boolean = lastSyncedAt > (Clock.System.now() - duration)
 }
 

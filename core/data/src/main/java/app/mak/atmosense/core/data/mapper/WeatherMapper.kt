@@ -45,6 +45,28 @@ internal fun CurrentWeatherDTO.toCurrentWeatherEntity(now: Instant): CurrentWeat
 
 internal fun String?.weatherImage() = "https://openweathermap.org/img/wn/$this@2x.png"
 
+internal fun CurrentWeatherEntity?.toWeatherCity(): CityWeather? {
+  if (this == null) return null
+  val primaryCondition = WeatherCondition(
+    id = condition_id, main = condition_main,
+    description = condition_description, iconCode = condition_icon_code.weatherImage(),
+  )
+  return CityWeather(
+    cityId = city_id,
+    cityName = "",
+    countryCode = "",
+    temperature = temperature,
+    feelsLike = feels_like,
+    humidity = humidity,
+    pressure = pressure,
+    windSpeed = wind_speed,
+    windDegrees = wind_degrees,
+    weatherIcon = condition_icon_code.weatherImage(),
+    weatherDescription = condition_description,
+    fetchedBefore = fetched_at.toString()
+  )
+}
+
 internal fun List<GetCitiesWeather>.toCityWeather(): List<CityWeather> {
   return map { weather ->
     CityWeather(
@@ -53,6 +75,10 @@ internal fun List<GetCitiesWeather>.toCityWeather(): List<CityWeather> {
       countryCode = weather.country_code,
       temperature = weather.temperature,
       feelsLike = weather.feels_like,
+      humidity = weather.humidity,
+      pressure = weather.pressure,
+      windSpeed = weather.wind_speed,
+      windDegrees = weather.wind_degrees,
       weatherIcon = weather.condition_icon_code.weatherImage(),
       weatherDescription = weather.condition_description,
       fetchedBefore = weather.fetched_at.toString()
@@ -68,10 +94,10 @@ internal fun List<HourlyDTO>.toForecast(cityId: Long): List<ForecastSlot> {
 }
 
 private fun HourlyDTO.domain(cityId: Long): ForecastSlot {
-  val primaryCondition = weather?.firstOrNull()?.let {
+  val primaryCondition = weather?.firstOrNull()?.let { dTO ->
     WeatherCondition(
-      id = it.id ?: 0, main = it.main.orEmpty(),
-      description = it.description.orEmpty(), iconCode = it.iconCode.orEmpty(),
+      id = dTO.id ?: 0, main = dTO.main.orEmpty(),
+      description = dTO.description.orEmpty(), iconCode = dTO.iconCode.orEmpty(),
     )
   }
   return ForecastSlot(
@@ -92,11 +118,30 @@ internal fun ForecastSlot.toForecastEntity(now: Instant): ForecastWeatherEntity 
     temperature = temperature,
     condition_id = condition?.id ?: 0,
     condition_main = condition?.main.orEmpty(),
+    condition_description = condition?.description.orEmpty(),
     icon_code = condition?.iconCode.orEmpty(),
     precipitation_probability = precipitationProbability,
     wind_speed = windSpeed,
     fetched_at = now
   )
+}
+
+internal fun List<ForecastWeatherEntity>.toForecast(): List<ForecastSlot> {
+  return map { forecast ->
+    ForecastSlot(
+      cityId = forecast.city_id,
+      timestamp = forecast.forecast_timestamp,
+      temperature = forecast.temperature,
+      condition = WeatherCondition(
+        id = forecast.condition_id,
+        main = forecast.condition_main,
+        description = forecast.condition_description,
+        iconCode = forecast.icon_code
+      ),
+      precipitationProbability = forecast.precipitation_probability,
+      windSpeed = forecast.wind_speed
+    )
+  }
 }
 
 

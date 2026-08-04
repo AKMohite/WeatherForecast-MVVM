@@ -10,4 +10,5 @@ interface CurrentWeatherDAO {
   fun deleteByCityId(cityId: Long)
   fun deleteAll()
   fun observeCitiesWeather(): Flow<List<GetCitiesWeather>>
+  fun observeCityCurrentWeather(cityId: Long): Flow<CurrentWeatherEntity?>
 }

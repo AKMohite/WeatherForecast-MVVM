@@ -246,7 +246,11 @@ private class CityManagementStateParameterProvider :
           feelsLike = 27.0,
           weatherIcon = "app:://atmosense.com/img/01d@2x.png",
           weatherDescription = "Clear sky",
-          fetchedBefore = "10 mins ago"
+          fetchedBefore = "10 mins ago",
+          humidity = 10,
+          pressure = 10,
+          windSpeed = 10.0,
+          windDegrees = 10
         ),
         CityWeather(
           cityId = 2,
@@ -256,7 +260,11 @@ private class CityManagementStateParameterProvider :
           feelsLike = 17.0,
           weatherIcon = "app:://atmosense.com/img/09d@2x.png",
           weatherDescription = "Light rain",
-          fetchedBefore = "20 mins ago"
+          fetchedBefore = "20 mins ago",
+          humidity = 10,
+          pressure = 10,
+          windSpeed = 10.0,
+          windDegrees = 10
         ),
         CityWeather(
           cityId = 3,
@@ -266,7 +274,11 @@ private class CityManagementStateParameterProvider :
           feelsLike = 35.0,
           weatherIcon = "app:://atmosense.com/img/11d@2x.png",
           weatherDescription = "Thunderstorm",
-          fetchedBefore = "5 mins ago"
+          fetchedBefore = "5 mins ago",
+          humidity = 10,
+          pressure = 10,
+          windSpeed = 10.0,
+          windDegrees = 10
         )
       ),
       eventSink = {}

@@ -2,6 +2,9 @@ package app.mak.atmosense.feature.weatherdetails
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.mak.atmosense.core.domain.usecase.ObserveWeatherDetails
 import app.mak.atmosense.core.domain.usecase.RefreshWeatherDetails
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -15,14 +18,19 @@ import dev.zacsweers.metro.AssistedInject
 class WeatherDetailsPresenter(
   @Assisted private val screen: WeatherDetailsScreen,
   @Assisted private val navigator: Navigator,
-  private val refreshWeatherDetails: RefreshWeatherDetails
+  private val refreshWeatherDetails: RefreshWeatherDetails,
+  private val observeWeatherDetails: ObserveWeatherDetails
 ) : Presenter<WeatherDetailsScreen.State> {
+
   @Composable
   override fun present(): WeatherDetailsScreen.State {
+    val details by observeWeatherDetails(screen.cityId).collectAsStateWithLifecycle(initialValue = null)
     LaunchedEffect(Unit) {
-      refreshWeatherDetails(screen.cityId)
+      refreshWeatherDetails(cityId = screen.cityId)
     }
-    return WeatherDetailsScreen.State(screen.cityId)
+    return WeatherDetailsScreen.State(
+      details = details
+    )
   }
 
   @CircuitInject(WeatherDetailsScreen::class, AppScope::class)

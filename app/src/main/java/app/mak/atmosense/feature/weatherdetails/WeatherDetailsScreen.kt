@@ -1,5 +1,6 @@
 package app.mak.atmosense.feature.weatherdetails
 
+import app.mak.atmosense.core.common.model.WeatherDetails
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
@@ -10,6 +11,6 @@ data class WeatherDetailsScreen(
 ) : Screen {
 
   data class State(
-    val cityId: Long
+    val details: WeatherDetails?
   ) : CircuitUiState
 }
