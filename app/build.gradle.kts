@@ -57,6 +57,7 @@ dependencies {
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.ktx)
+  implementation(libs.kotlinx.datetime)
   implementation(libs.circuit.foundation)
   implementation(libs.coil.compose)
   implementation(libs.coil.network.okhttp)

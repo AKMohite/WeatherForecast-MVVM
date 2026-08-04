@@ -7,6 +7,7 @@ import app.mak.atmosense.core.common.model.WeatherCondition
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.ForecastWeatherEntity
 import app.mak.atmosense.core.database.dao.GetCitiesWeather
+import app.mak.atmosense.core.database.dao.ObserveWeatherByCity
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
 import app.mak.atmosense.core.network.dto.HourlyDTO
 import app.mak.atmosense.core.network.dto.LocationDTO
@@ -67,23 +68,43 @@ internal fun CurrentWeatherEntity?.toWeatherCity(): CityWeather? {
   )
 }
 
-internal fun List<GetCitiesWeather>.toCityWeather(): List<CityWeather> {
+internal fun List<GetCitiesWeather>.toWeatherCities(): List<CityWeather> {
   return map { weather ->
-    CityWeather(
-      cityId = weather.city_id,
-      cityName = weather.name,
-      countryCode = weather.country_code,
-      temperature = weather.temperature,
-      feelsLike = weather.feels_like,
-      humidity = weather.humidity,
-      pressure = weather.pressure,
-      windSpeed = weather.wind_speed,
-      windDegrees = weather.wind_degrees,
-      weatherIcon = weather.condition_icon_code.weatherImage(),
-      weatherDescription = weather.condition_description,
-      fetchedBefore = weather.fetched_at.toString()
-    )
+    weather.toWeatherCity()
   }
+}
+
+internal fun GetCitiesWeather.toWeatherCity(): CityWeather = CityWeather(
+  cityId = city_id,
+  cityName = name,
+  countryCode = country_code,
+  temperature = temperature,
+  feelsLike = feels_like,
+  humidity = humidity,
+  pressure = pressure,
+  windSpeed = wind_speed,
+  windDegrees = wind_degrees,
+  weatherIcon = condition_icon_code.weatherImage(),
+  weatherDescription = condition_description,
+  fetchedBefore = fetched_at.toString()
+)
+
+internal fun ObserveWeatherByCity?.toObserveCity(): CityWeather? {
+  if (this == null) return null
+  return CityWeather(
+    cityId = city_id,
+    cityName = name,
+    countryCode = country_code,
+    temperature = temperature,
+    feelsLike = feels_like,
+    humidity = humidity,
+    pressure = pressure,
+    windSpeed = wind_speed,
+    windDegrees = wind_degrees,
+    weatherIcon = condition_icon_code.weatherImage(),
+    weatherDescription = condition_description,
+    fetchedBefore = fetched_at.toString()
+  )
 }
 
 

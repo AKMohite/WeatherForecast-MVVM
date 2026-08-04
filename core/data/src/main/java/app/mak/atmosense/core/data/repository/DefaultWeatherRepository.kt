@@ -10,12 +10,12 @@ import app.mak.atmosense.core.common.model.SearchCity
 import app.mak.atmosense.core.common.model.SyncRequestType
 import app.mak.atmosense.core.data.mapper.toAppException
 import app.mak.atmosense.core.data.mapper.toCityEntity
-import app.mak.atmosense.core.data.mapper.toCityWeather
 import app.mak.atmosense.core.data.mapper.toCurrentWeatherEntity
 import app.mak.atmosense.core.data.mapper.toForecast
 import app.mak.atmosense.core.data.mapper.toForecastEntity
+import app.mak.atmosense.core.data.mapper.toObserveCity
 import app.mak.atmosense.core.data.mapper.toSearchCities
-import app.mak.atmosense.core.data.mapper.toWeatherCity
+import app.mak.atmosense.core.data.mapper.toWeatherCities
 import app.mak.atmosense.core.database.dao.SyncEntity
 import app.mak.atmosense.core.database.dao.api.CityDAO
 import app.mak.atmosense.core.database.dao.api.CurrentWeatherDAO
@@ -156,7 +156,7 @@ class DefaultWeatherRepository(
   override fun observeCitiesWeather(): Flow<List<CityWeather>> {
     return currentWeatherDAO.observeCitiesWeather()
       .map { weatherForCities ->
-        weatherForCities.toCityWeather()
+        weatherForCities.toWeatherCities()
       }
   }
 
@@ -167,7 +167,7 @@ class DefaultWeatherRepository(
 
   override fun observeCityCurrentWeather(cityId: Long): Flow<CityWeather?> {
     return currentWeatherDAO.observeCityCurrentWeather(cityId)
-      .map { it.toWeatherCity() }
+      .map { it?.toObserveCity() }
   }
 
   private fun isRequestValid(
@@ -175,4 +175,5 @@ class DefaultWeatherRepository(
     duration: Duration,
   ): Boolean = lastSyncedAt > (Clock.System.now() - duration)
 }
+
 

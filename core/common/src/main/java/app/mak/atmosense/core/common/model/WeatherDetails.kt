@@ -5,5 +5,6 @@ data class WeatherDetails(
   val forecastWeather: List<ForecastSlot>
 ) {
   val lastSyncedAt: String = currentWeather.fetchedBefore
-  val cityName: String = "${currentWeather.cityName}, ${currentWeather.countryCode}"
+  val cityName: String = listOf(currentWeather.cityName, currentWeather.countryCode)
+    .joinToString(", ")
 }

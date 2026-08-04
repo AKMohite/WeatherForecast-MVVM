@@ -38,7 +38,7 @@ internal fun WeatherDetailsUI(
 ) {
   val details = state.details ?: return
   LazyColumn(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxSize()
   ) {
     item {
@@ -49,7 +49,7 @@ internal fun WeatherDetailsUI(
         horizontalArrangement = Arrangement.SpaceBetween
       ) {
         Text(
-          text = details.cityName.orEmpty(),
+          text = details.cityName,
           style = MaterialTheme.typography.headlineMedium,
           modifier = Modifier.padding(16.dp)
         )
@@ -139,7 +139,7 @@ private fun CurrentSection(weather: CityWeather?) {
         contentDescription = weather?.weatherDescription
       )
       Text(
-        text = weather?.weatherIcon.orEmpty(),
+        text = weather?.weatherDescription.orEmpty(),
         style = MaterialTheme.typography.displaySmall
       )
     }

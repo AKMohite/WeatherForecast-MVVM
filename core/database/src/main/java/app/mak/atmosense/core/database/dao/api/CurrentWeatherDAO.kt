@@ -2,6 +2,7 @@ package app.mak.atmosense.core.database.dao.api
 
 import app.mak.atmosense.core.database.dao.CurrentWeatherEntity
 import app.mak.atmosense.core.database.dao.GetCitiesWeather
+import app.mak.atmosense.core.database.dao.ObserveWeatherByCity
 import kotlinx.coroutines.flow.Flow
 
 interface CurrentWeatherDAO {
@@ -10,5 +11,5 @@ interface CurrentWeatherDAO {
   fun deleteByCityId(cityId: Long)
   fun deleteAll()
   fun observeCitiesWeather(): Flow<List<GetCitiesWeather>>
-  fun observeCityCurrentWeather(cityId: Long): Flow<CurrentWeatherEntity?>
+  fun observeCityCurrentWeather(cityId: Long): Flow<ObserveWeatherByCity?>
 }
