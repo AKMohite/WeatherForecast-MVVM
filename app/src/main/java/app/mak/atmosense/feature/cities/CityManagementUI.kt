@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -57,7 +58,20 @@ internal fun CityManagementUI(
 ) {
   val snackbarHostState = SnackbarHostState()
   Scaffold(
-    snackbarHost = { SnackbarHost(snackbarHostState) }
+    snackbarHost = { SnackbarHost(snackbarHostState) },
+    floatingActionButton = {
+      if (state is CityManagementScreen.State.Success) {
+        FloatingActionButton(
+          onClick = { state.eventSink(CityManagementScreen.Event.SearchLocation) },
+        ) {
+          Text(
+            modifier = Modifier
+              .padding(horizontal = 12.dp),
+            text = stringResource(R.string.add_location)
+          )
+        }
+      }
+    }
   ) { paddingValues ->
     Box(
       modifier = modifier
