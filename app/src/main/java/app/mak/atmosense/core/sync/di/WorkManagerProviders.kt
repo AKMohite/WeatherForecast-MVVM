@@ -7,9 +7,11 @@ import androidx.work.WorkerParameters
 import app.mak.atmosense.core.sync.WeatherSyncWorker
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoMap
 import dev.zacsweers.metro.Multibinds
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.StringKey
 
 @ContributesTo(AppScope::class)
 interface WorkManagerProviders {
@@ -22,9 +24,11 @@ interface WorkManagerProviders {
   fun workerFactories(): Map<String, @JvmSuppressWildcards (Context, WorkerParameters) -> ListenableWorker>
 
   @Provides
+  @IntoMap
+  @StringKey("app.mak.atmosense.core.sync.WeatherSyncWorker")
   fun provideWeatherSyncWorkerFactory(
     factory: WeatherSyncWorker.Factory
-  ): Map<String, @JvmSuppressWildcards (Context, WorkerParameters) -> ListenableWorker> {
-    return mapOf(WeatherSyncWorker::class.java.name to factory::create)
+  ): (Context, WorkerParameters) -> ListenableWorker {
+    return factory::create
   }
 }
