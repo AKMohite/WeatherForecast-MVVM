@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,44 +41,51 @@ internal fun SearchUI(
 ) {
   var query by rememberSaveable { mutableStateOf("") }
   val eventSink = state.eventSink
-  Box(
+
+  Surface(
     modifier = modifier
       .fillMaxSize(),
-    contentAlignment = Alignment.Center
   ) {
-    AnimatedVisibility(state.isLoading) {
-      CircularProgressIndicator(
-        modifier = Modifier.padding(16.dp)
-      )
-    }
-    Column(
-      modifier = modifier
-        .fillMaxSize()
-        .padding(horizontal = 8.dp)
+    Box(
+      contentAlignment = Alignment.Center
     ) {
-      OutlinedTextField(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(vertical = 8.dp),
-        value = query,
-        placeholder = { Text(text = stringResource(R.string.search_hint)) },
-        onValueChange = {
-          query = it
-        },
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { eventSink(SearchScreen.Event.Search(query)) }),
-        singleLine = true,
-        maxLines = 1
-      )
+      AnimatedVisibility(state.isLoading) {
+        CircularProgressIndicator(
+          modifier = Modifier
+            .wrapContentWidth()
+            .wrapContentHeight()
+            .padding(16.dp)
+        )
+      }
+      Column(
+        modifier = modifier
+          .fillMaxSize()
+          .padding(horizontal = 8.dp)
+      ) {
+        OutlinedTextField(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+          value = query,
+          placeholder = { Text(text = stringResource(R.string.search_hint)) },
+          onValueChange = {
+            query = it
+          },
+          keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+          keyboardActions = KeyboardActions(onSearch = { eventSink(SearchScreen.Event.Search(query)) }),
+          singleLine = true,
+          maxLines = 1
+        )
 
-      LazyColumn {
-        items(items = state.cities, key = { result -> result.id }) { result ->
-          CityResult(
-            result = result,
-            onCityClick = {
-              eventSink(SearchScreen.Event.OnCitySelected(result))
-            }
-          )
+        LazyColumn {
+          items(items = state.cities, key = { result -> result.id }) { result ->
+            CityResult(
+              result = result,
+              onCityClick = {
+                eventSink(SearchScreen.Event.OnCitySelected(result))
+              }
+            )
+          }
         }
       }
     }

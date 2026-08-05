@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,36 +38,41 @@ internal fun WeatherDetailsUI(
   state: WeatherDetailsScreen.State
 ) {
   val details = state.details ?: return
-  LazyColumn(
+  Scaffold(
     modifier = modifier
-      .fillMaxSize()
   ) {
-    item {
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-      ) {
-        Text(
-          text = details.cityName,
-          style = MaterialTheme.typography.headlineMedium,
-          modifier = Modifier.padding(16.dp)
-        )
-        Text(
-          text = details.lastSyncedAt,
-          style = MaterialTheme.typography.bodySmall,
-        )
+    LazyColumn(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(it)
+    ) {
+      item {
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+          horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+          Text(
+            text = details.cityName,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(16.dp)
+          )
+          Text(
+            text = details.lastSyncedAt,
+            style = MaterialTheme.typography.bodySmall,
+          )
+        }
       }
-    }
-    item {
-      CurrentSection(details.currentWeather)
-    }
-    item {
-      DetailsSection(details.currentWeather)
-    }
-    item {
-      ForecastSection(details.forecastWeather)
+      item {
+        CurrentSection(details.currentWeather)
+      }
+      item {
+        DetailsSection(details.currentWeather)
+      }
+      item {
+        ForecastSection(details.forecastWeather)
+      }
     }
   }
 }
