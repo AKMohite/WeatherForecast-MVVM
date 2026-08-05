@@ -25,4 +25,8 @@ dependencies {
   implementation(project(":core:network"))
   implementation(project(":core:database"))
   implementation(libs.kotlinx.coroutines.core)
+
+  testImplementation(libs.junit)
+  testImplementation(libs.coroutines.test)
+  testImplementation(testFixtures(project(":core:network")))
 }

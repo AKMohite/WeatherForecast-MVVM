@@ -1,5 +1,6 @@
-package app.mak.atmosense.core.network
+package app.mak.atmosense.core.network.testing
 
+import app.mak.atmosense.core.network.WeatherAPI
 import app.mak.atmosense.core.network.dto.CurrentWeatherDTO
 import app.mak.atmosense.core.network.dto.ForecastWeatherDTO
 import app.mak.atmosense.core.network.dto.LocationDTO

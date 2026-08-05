@@ -42,7 +42,8 @@ class DefaultWeatherRepository(
   private val currentWeatherDAO: CurrentWeatherDAO,
   private val syncDAO: SyncDAO,
   private val forecastWeatherDAO: ForecastWeatherDAO,
-  private val dbTransaction: DatabaseTransaction
+  private val dbTransaction: DatabaseTransaction,
+  private val clock: Clock
 ) : WeatherRepository {
 
   override suspend fun fetchCurrentWeather(coordinates: LocationCoordinate): AppResult<Unit> {
@@ -53,7 +54,7 @@ class DefaultWeatherRepository(
         "unit" to "metric"
       )
       val currentWeather = weatherAPI.getCurrentWeather(queries)
-      val now = Clock.System.now()
+      val now = clock.now()
       val city = currentWeather.toCityEntity(now)
       dbTransaction {
         cityDAO.insert(city)
@@ -135,7 +136,7 @@ class DefaultWeatherRepository(
       )
       val forecastWeather = weatherAPI.getForecastWeather(queries)
       val forecastSlots = forecastWeather.list?.toForecast(cityId).orEmpty()
-      val now = Clock.System.now()
+      val now = clock.now()
       val forecastEntities = forecastSlots.map { it.toForecastEntity(now) }
       dbTransaction {
         forecastWeatherDAO.deleteByCityId(cityId)
@@ -173,7 +174,7 @@ class DefaultWeatherRepository(
   private fun isRequestValid(
     lastSyncedAt: Instant,
     duration: Duration,
-  ): Boolean = lastSyncedAt > (Clock.System.now() - duration)
+  ): Boolean = lastSyncedAt > (clock.now() - duration)
 }
 
 
