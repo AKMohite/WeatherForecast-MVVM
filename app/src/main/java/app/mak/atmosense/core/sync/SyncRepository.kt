@@ -26,7 +26,8 @@ class DefaultSyncRepository(
 ) : SyncRepository {
   override suspend fun sync() {
     withContext(Dispatchers.IO) {
-      val cities = cityDAO.getAll()
+      // TODO need to update all cities?
+      val cities = cityDAO.getAll().take(10)
 
       supervisorScope {
         cities.forEachIndexed { index, city ->

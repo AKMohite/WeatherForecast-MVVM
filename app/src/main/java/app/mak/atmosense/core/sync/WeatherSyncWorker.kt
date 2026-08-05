@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -21,6 +22,11 @@ class WeatherSyncWorker @AssistedInject constructor(
       if (e is CancellationException) throw e
       Result.failure()
     }
+  }
+
+  @AssistedFactory
+  interface Factory {
+    fun create(context: Context, params: WorkerParameters): WeatherSyncWorker
   }
 }
 
