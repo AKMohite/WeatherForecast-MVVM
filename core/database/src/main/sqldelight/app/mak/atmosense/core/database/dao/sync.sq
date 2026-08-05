@@ -1,0 +1,27 @@
+import kotlin.time.Instant;
+
+CREATE TABLE syncEntity (
+  city_id INTEGER NOT NULL,
+  sync_type TEXT NOT NULL,
+  last_attempt_at INTEGER AS Instant,
+  last_success_at INTEGER AS Instant,
+  PRIMARY KEY (city_id, sync_type),
+  FOREIGN KEY (city_id) REFERENCES cityEntity(id) ON DELETE CASCADE
+);
+
+insert:
+INSERT OR REPLACE INTO syncEntity (
+  city_id,
+  sync_type,
+  last_attempt_at,
+  last_success_at
+) VALUES (?, ?, ?, ?);
+
+getSyncStatus:
+SELECT * FROM syncEntity WHERE city_id = :cityId AND sync_type = :syncType;
+
+deleteByCityId:
+DELETE FROM syncEntity WHERE city_id = :cityId;
+
+deleteAll:
+DELETE FROM syncEntity;

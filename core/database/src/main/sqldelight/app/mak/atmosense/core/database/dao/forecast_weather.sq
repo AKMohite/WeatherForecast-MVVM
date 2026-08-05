@@ -1,0 +1,39 @@
+import kotlin.time.Instant;
+
+CREATE TABLE forecastWeatherEntity (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  city_id INTEGER NOT NULL,
+  forecast_timestamp INTEGER AS Instant NOT NULL,
+  temperature REAL NOT NULL,
+  condition_id INTEGER NOT NULL,
+  condition_main TEXT NOT NULL,
+  condition_description TEXT NOT NULL,
+  icon_code TEXT NOT NULL,
+  precipitation_probability REAL NOT NULL,
+  wind_speed REAL NOT NULL,
+  fetched_at INTEGER AS Instant NOT NULL,
+  FOREIGN KEY (city_id) REFERENCES cityEntity(id) ON DELETE CASCADE
+);
+
+insert:
+INSERT OR REPLACE INTO forecastWeatherEntity (
+  city_id,
+  forecast_timestamp,
+  temperature,
+  condition_id,
+  condition_main,
+  condition_description,
+  icon_code,
+  precipitation_probability,
+  wind_speed,
+  fetched_at
+) VALUES ?;
+
+getForecastByCityId:
+SELECT * FROM forecastWeatherEntity WHERE city_id = :cityId ORDER BY forecast_timestamp ASC;
+
+deleteByCityId:
+DELETE FROM forecastWeatherEntity WHERE city_id = :cityId;
+
+deleteAll:
+DELETE FROM forecastWeatherEntity;
