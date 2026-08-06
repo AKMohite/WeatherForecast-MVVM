@@ -11,6 +11,11 @@ android {
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
+
+  testFixtures {
+    enable = true
+  }
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
@@ -21,4 +26,8 @@ android {
 dependencies {
   implementation(project(":core:common"))
   implementation(libs.kotlinx.coroutines.core)
+
+  testFixturesImplementation(project(":core:common"))
+  testFixturesImplementation(project(":core:domain"))
+  testFixturesImplementation(libs.kotlinx.coroutines.core)
 }

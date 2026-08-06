@@ -3,6 +3,7 @@ package app.mak.atmosense.core.location
 import app.mak.atmosense.core.common.model.AppError
 import app.mak.atmosense.core.common.model.AppResult
 import app.mak.atmosense.core.common.model.LocationCoordinate
+import app.mak.atmosense.core.location.testing.FakeLocationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -34,11 +35,5 @@ class LocationAccessCoordinatorTest {
 
     assertEquals(LocationAccessResult.Unavailable(AppError.Timeout), result)
   }
-
-}
-
-class FakeLocationService : LocationService {
-  var result: AppResult<LocationCoordinate> = AppResult.Failure(AppError.Unknown(null, null))
-  override suspend fun getCurrentLocation(): AppResult<LocationCoordinate> = result
 
 }

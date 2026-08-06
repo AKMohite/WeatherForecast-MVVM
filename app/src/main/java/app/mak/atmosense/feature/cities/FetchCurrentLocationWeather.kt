@@ -11,18 +11,13 @@ class FetchCurrentLocationWeather(
   private val locationCoordinator: LocationAccessCoordinator,
   private val weatherRepository: WeatherRepository
 ) {
-  suspend operator fun invoke() {
+  suspend operator fun invoke(): AppResult<Unit> {
     val locationResult = locationCoordinator.resolveCurrentLocation()
-    if (locationResult is LocationAccessResult.Available) {
-      when (val weatherResult = weatherRepository.fetchCurrentWeather(locationResult.coordinates)) {
-        is AppResult.Success -> {
-          // Handle success
-        }
-
-        is AppResult.Failure -> {
-          // Handle failure
-        }
-      }
+    return if (locationResult is LocationAccessResult.Available) {
+      weatherRepository.fetchCurrentWeather(locationResult.coordinates)
+    } else {
+      val error = (locationResult as? LocationAccessResult.Unavailable)?.error
+      AppResult.Failure(error = error)
     }
   }
 }

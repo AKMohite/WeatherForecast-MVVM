@@ -6,6 +6,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -46,9 +48,10 @@ class DefaultSyncRepository(
     }
   }
 
-  private suspend fun refreshWeatherDetails(id: Long, isForceRefresh: Boolean) {
-    weatherRepository.fetchCurrentWeatherForCity(isForceRefresh, id)
-    weatherRepository.fetchForecastWeatherForCity(isForceRefresh, id)
+  private suspend fun refreshWeatherDetails(id: Long, isForceRefresh: Boolean) = coroutineScope {
+    val current = async { weatherRepository.fetchCurrentWeatherForCity(isForceRefresh, id) }
+    val forecast = async { weatherRepository.fetchForecastWeatherForCity(isForceRefresh, id) }
+    Pair(current.await(), forecast.await())
   }
 
 }
