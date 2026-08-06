@@ -28,6 +28,8 @@ dependencies {
   implementation(libs.kotlinx.coroutines.core)
 
   testFixturesImplementation(project(":core:common"))
-  testFixturesImplementation(project(":core:domain"))
   testFixturesImplementation(libs.kotlinx.coroutines.core)
+
+  testImplementation(libs.junit)
+  testImplementation(libs.coroutines.test)
 }

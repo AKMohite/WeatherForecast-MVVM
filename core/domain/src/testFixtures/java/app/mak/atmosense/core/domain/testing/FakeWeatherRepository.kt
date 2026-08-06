@@ -10,9 +10,15 @@ import kotlinx.coroutines.flow.Flow
 
 class FakeWeatherRepository : WeatherRepository {
   var fetchResult: AppResult<Unit> = AppResult.Success(Unit)
+  var fetchForecastResult: AppResult<Unit> = AppResult.Success(Unit)
   var passedCoordinates: LocationCoordinate? = null
+  var passedCityId: Long? = null
+  var passedIsForceRefresh: Boolean? = null
+
+  var error: Throwable? = null
 
   override suspend fun fetchCurrentWeather(coordinates: LocationCoordinate): AppResult<Unit> {
+    error?.let { throw it }
     passedCoordinates = coordinates
     return fetchResult
   }
@@ -21,12 +27,22 @@ class FakeWeatherRepository : WeatherRepository {
   override suspend fun fetchCurrentWeatherForCity(
     isForceRefresh: Boolean,
     cityId: Long
-  ): AppResult<Unit> = TODO()
+  ): AppResult<Unit> {
+    error?.let { throw it }
+    passedIsForceRefresh = isForceRefresh
+    passedCityId = cityId
+    return fetchResult
+  }
 
   override suspend fun fetchForecastWeatherForCity(
     isForceRefresh: Boolean,
     cityId: Long
-  ): AppResult<Unit> = TODO()
+  ): AppResult<Unit> {
+    error?.let { throw it }
+    passedIsForceRefresh = isForceRefresh
+    passedCityId = cityId
+    return fetchForecastResult
+  }
 
   override fun observeCitiesWeather(): Flow<List<CityWeather>> = TODO()
   override fun observeCityForecastWeather(cityId: Long): Flow<List<ForecastSlot>> = TODO()
