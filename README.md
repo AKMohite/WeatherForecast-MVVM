@@ -11,6 +11,12 @@ multi-module structure, and the latest Jetpack Compose technologies.
 - Offline support using SQLDelight.
 - Modern UI with Jetpack Compose and Material 3.
 
+## 📸 Screenshots
+
+|                   Home                   |                   City Details                   |                  Empty State                   |
+|:----------------------------------------:|:------------------------------------------------:|:----------------------------------------------:|
+| <img src="screens/home.png" width="250"> | <img src="screens/city_details.png" width="250"> | <img src="screens/empty_home.png" width="250"> |
+
 ## 🏗️ Architecture
 
 The project follows a **Multi-module Clean Architecture** approach to ensure scalability,
