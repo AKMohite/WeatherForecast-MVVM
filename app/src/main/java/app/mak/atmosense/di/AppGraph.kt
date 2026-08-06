@@ -1,6 +1,8 @@
 package app.mak.atmosense.di
 
 import android.content.Context
+import app.mak.atmosense.core.sync.MetroWorkerFactory
+import app.mak.atmosense.core.sync.SyncScheduler
 import com.slack.circuit.foundation.Circuit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -12,6 +14,8 @@ import dev.zacsweers.metro.Provides
 interface AppGraph {
   val repository: DummyRepository
   val circuit: Circuit
+  val syncScheduler: SyncScheduler
+  val workerFactory: MetroWorkerFactory
 
   @DependencyGraph.Factory
   fun interface Factory {

@@ -4,14 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import app.mak.atmosense.di.AppGraph
 import app.mak.atmosense.feature.cities.CityManagementScreen
 import app.mak.atmosense.ui.theme.AtmosenseTheme
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
-import dev.zacsweers.metro.createGraphFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -20,7 +18,8 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     // TODO need to check graph
-    val appGraph = createGraphFactory<AppGraph.Factory>().create(applicationContext)
+    val appGraph =
+      (application as? AtmosenseApp)?.appGraph ?: error("AppGraph not found for $application")
     setContent {
       AtmosenseTheme {
         val backStack = rememberSaveableBackStack(CityManagementScreen)

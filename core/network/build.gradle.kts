@@ -13,6 +13,11 @@ android {
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
+
+  testFixtures {
+    enable = true
+  }
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
@@ -27,4 +32,8 @@ dependencies {
   implementation(libs.ktor.client.android)
   implementation(libs.ktor.client.content.negotiation)
   implementation(libs.ktor.serialization.kotlinx.json)
+
+  testImplementation(libs.junit)
+  testImplementation(libs.coroutines.test)
+  testImplementation(libs.ktor.client.mock)
 }

@@ -36,6 +36,10 @@ android {
     compose = true
     buildConfig = true
   }
+
+  testOptions {
+    unitTests.isReturnDefaultValues = true
+  }
 }
 
 ksp {
@@ -52,11 +56,13 @@ dependencies {
   implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.icons.core)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.ktx)
+  implementation(libs.androidx.work.runtime.ktx)
   implementation(libs.kotlinx.datetime)
   implementation(libs.circuit.foundation)
   implementation(libs.coil.compose)
@@ -64,6 +70,12 @@ dependencies {
   api(libs.circuit.codegen.annotations)
   ksp(libs.circuit.codegen)
   testImplementation(libs.junit)
+  testImplementation(libs.coroutines.test)
+  testImplementation(libs.androidx.work.testing)
+  testImplementation(libs.androidx.test.core)
+  testImplementation(libs.robolectric)
+  testImplementation(testFixtures(project(":core:location")))
+  testImplementation(testFixtures(project(":core:domain")))
   androidTestImplementation(libs.androidx.espresso.core)
   androidTestImplementation(libs.androidx.junit)
   debugImplementation(libs.androidx.compose.ui.test.manifest)

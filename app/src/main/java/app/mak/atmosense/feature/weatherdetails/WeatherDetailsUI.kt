@@ -1,6 +1,7 @@
 package app.mak.atmosense.feature.weatherdetails
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +13,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,51 +34,116 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.mak.atmosense.R
+import app.mak.atmosense.core.common.model.AppError
 import app.mak.atmosense.core.common.model.CityWeather
 import app.mak.atmosense.core.common.model.ForecastSlot
 import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
 
+@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(screen = WeatherDetailsScreen::class, scope = AppScope::class)
 @Composable
 internal fun WeatherDetailsUI(
   modifier: Modifier = Modifier,
   state: WeatherDetailsScreen.State
 ) {
-  val details = state.details ?: return
-  LazyColumn(
-    modifier = modifier
-      .fillMaxSize()
-  ) {
-    item {
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-      ) {
-        Text(
-          text = details.cityName,
-          style = MaterialTheme.typography.headlineMedium,
-          modifier = Modifier.padding(16.dp)
-        )
-        Text(
-          text = details.lastSyncedAt,
-          style = MaterialTheme.typography.bodySmall,
+  val details = state.details
+  val eventSink = state.eventSink
+  Scaffold(
+    modifier = modifier,
+    topBar = {
+      TopAppBar(
+        title = { Text(details?.cityName.orEmpty()) },
+        actions = {
+          IconButton(onClick = { eventSink(WeatherDetailsScreen.Event.Refresh) }) {
+            Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.retry))
+          }
+        }
+      )
+    }
+  ) { padding ->
+    Box(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(padding)
+    ) {
+      if (details != null) {
+        LazyColumn(
+          modifier = Modifier.fillMaxSize()
+        ) {
+          item {
+            Row(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+              horizontalArrangement = Arrangement.End
+            ) {
+              Text(
+                text = details.lastSyncedAt,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(8.dp)
+              )
+            }
+          }
+          item {
+            CurrentSection(details.currentWeather)
+          }
+          item {
+            DetailsSection(details.currentWeather)
+          }
+          item {
+            ForecastSection(details.forecastWeather)
+          }
+        }
+      }
+
+      if (state.isLoading && details == null) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+      }
+
+      state.error?.let { error ->
+        ErrorDialog(
+          error = error,
+          onDismiss = { eventSink(WeatherDetailsScreen.Event.DismissError) },
+          onRetry = { eventSink(WeatherDetailsScreen.Event.Refresh) }
         )
       }
     }
-    item {
-      CurrentSection(details.currentWeather)
-    }
-    item {
-      DetailsSection(details.currentWeather)
-    }
-    item {
-      ForecastSection(details.forecastWeather)
-    }
   }
+}
+
+@Composable
+private fun ErrorDialog(
+  error: AppError,
+  onDismiss: () -> Unit,
+  onRetry: () -> Unit
+) {
+  val message = when (error) {
+    AppError.NoInternet -> stringResource(R.string.error_no_internet)
+    AppError.Timeout -> stringResource(R.string.error_timeout)
+    AppError.EntityNotFound -> stringResource(R.string.error_not_found)
+    is AppError.Unknown -> stringResource(R.string.error_unknown, error.message ?: "")
+  }
+
+  AlertDialog(
+    onDismissRequest = onDismiss,
+    title = { Text(stringResource(R.string.app_name)) },
+    text = { Text(message) },
+    confirmButton = {
+      TextButton(onClick = {
+        onRetry()
+        onDismiss()
+      }) {
+        Text(stringResource(R.string.retry))
+      }
+    },
+    dismissButton = {
+      TextButton(onClick = onDismiss) {
+        Text(stringResource(R.string.dismiss))
+      }
+    }
+  )
 }
 
 @Composable

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class ObserveCitiesWeather(
   private val weatherRepository: WeatherRepository
 ) {
-  suspend operator fun invoke(): Flow<List<CityWeather>> {
+  operator fun invoke(): Flow<List<CityWeather>> {
     return weatherRepository.observeCitiesWeather()
   }
 }
