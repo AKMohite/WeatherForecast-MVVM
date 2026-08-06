@@ -1,5 +1,7 @@
 package app.mak.atmosense.core.sync
 
+import android.util.Log
+import app.mak.atmosense.core.common.model.AppResult
 import app.mak.atmosense.core.database.dao.api.CityDAO
 import app.mak.atmosense.core.domain.repository.WeatherRepository
 import dev.zacsweers.metro.AppScope
@@ -38,9 +40,23 @@ class DefaultSyncRepository(
               // Stagger the starts slightly (500ms) to avoid burst API calls
               // while still being faster than pure sequential execution.
               delay((index * 500).milliseconds)
-              refreshWeatherDetails(city.id, true)
+              val (currentResult, forecastResult) = refreshWeatherDetails(city.id, true)
+
+              if (currentResult is AppResult.Failure) {
+                Log.e(
+                  "SyncRepository",
+                  "Failed to sync current weather for city ${city.id}: ${currentResult.error}"
+                )
+              }
+              if (forecastResult is AppResult.Failure) {
+                Log.e(
+                  "SyncRepository",
+                  "Failed to sync forecast for city ${city.id}: ${forecastResult.error}"
+                )
+              }
             } catch (e: Exception) {
               if (e is CancellationException) throw e
+              Log.e("SyncRepository", "Error syncing city ${city.id}", e)
             }
           }
         }

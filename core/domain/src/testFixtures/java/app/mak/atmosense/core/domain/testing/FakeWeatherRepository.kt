@@ -11,6 +11,15 @@ import kotlinx.coroutines.flow.Flow
 class FakeWeatherRepository : WeatherRepository {
   var fetchResult: AppResult<Unit> = AppResult.Success(Unit)
   var fetchForecastResult: AppResult<Unit> = AppResult.Success(Unit)
+
+  // Results per city ID
+  val cityFetchResults = mutableMapOf<Long, AppResult<Unit>>()
+  val cityForecastResults = mutableMapOf<Long, AppResult<Unit>>()
+
+  // Call tracking
+  val fetchedCityIds = mutableListOf<Long>()
+  val fetchedForecastCityIds = mutableListOf<Long>()
+
   var passedCoordinates: LocationCoordinate? = null
   var passedCityId: Long? = null
   var passedIsForceRefresh: Boolean? = null
@@ -31,7 +40,8 @@ class FakeWeatherRepository : WeatherRepository {
     error?.let { throw it }
     passedIsForceRefresh = isForceRefresh
     passedCityId = cityId
-    return fetchResult
+    fetchedCityIds.add(cityId)
+    return cityFetchResults[cityId] ?: fetchResult
   }
 
   override suspend fun fetchForecastWeatherForCity(
@@ -41,7 +51,8 @@ class FakeWeatherRepository : WeatherRepository {
     error?.let { throw it }
     passedIsForceRefresh = isForceRefresh
     passedCityId = cityId
-    return fetchForecastResult
+    fetchedForecastCityIds.add(cityId)
+    return cityForecastResults[cityId] ?: fetchForecastResult
   }
 
   override fun observeCitiesWeather(): Flow<List<CityWeather>> = TODO()
