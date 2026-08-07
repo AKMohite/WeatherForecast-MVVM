@@ -51,7 +51,7 @@ class DefaultWeatherRepository(
       val queries = mapOf(
         "lat" to coordinates.latitude.toString(),
         "lon" to coordinates.longitude.toString(),
-        "unit" to "metric"
+        "unit" to "standard"
       )
       val currentWeather = weatherAPI.getCurrentWeather(queries)
       val now = clock.now()
@@ -132,7 +132,7 @@ class DefaultWeatherRepository(
       val queries = mapOf(
         "lat" to coordinates.latitude.toString(),
         "lon" to coordinates.longitude.toString(),
-        "unit" to "metric"
+        "unit" to "standard"
       )
       val forecastWeather = weatherAPI.getForecastWeather(queries)
       val forecastSlots = forecastWeather.list?.toForecast(cityId).orEmpty()
