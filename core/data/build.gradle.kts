@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.metro)
+  alias(libs.plugins.protobuf)
 }
 
 android {
@@ -25,8 +26,30 @@ dependencies {
   implementation(project(":core:network"))
   implementation(project(":core:database"))
   implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.javax.inject)
+  implementation(libs.androidx.datastore)
+  implementation(libs.protobuf.javalite)
+  implementation(libs.protobuf.kotlin.lite)
 
   testImplementation(libs.junit)
   testImplementation(libs.coroutines.test)
   testImplementation(testFixtures(project(":core:network")))
+}
+
+protobuf {
+  protoc {
+    artifact = libs.protobuf.protoc.get().toString()
+  }
+  generateProtoTasks {
+    all().forEach { task ->
+      task.builtins {
+        register("java") {
+          option("lite")
+        }
+        register("kotlin") {
+          option("lite")
+        }
+      }
+    }
+  }
 }

@@ -10,6 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.mak.atmosense.core.common.model.AppError
 import app.mak.atmosense.core.common.model.AppResult
+import app.mak.atmosense.core.common.model.UserSettings
+import app.mak.atmosense.core.domain.usecase.ObserveUserSettings
 import app.mak.atmosense.core.domain.usecase.ObserveWeatherDetails
 import app.mak.atmosense.core.domain.usecase.RefreshWeatherDetails
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -26,12 +28,14 @@ class WeatherDetailsPresenter(
   @Assisted private val screen: WeatherDetailsScreen,
   @Assisted private val navigator: Navigator,
   private val refreshWeatherDetails: RefreshWeatherDetails,
-  private val observeWeatherDetails: ObserveWeatherDetails
+  private val observeWeatherDetails: ObserveWeatherDetails,
+  private val observeUserSettings: ObserveUserSettings
 ) : Presenter<WeatherDetailsScreen.State> {
 
   @Composable
   override fun present(): WeatherDetailsScreen.State {
     val details by observeWeatherDetails(screen.cityId).collectAsStateWithLifecycle(initialValue = null)
+    val settings by observeUserSettings().collectAsStateWithLifecycle(initialValue = UserSettings())
     var isLoading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<AppError?>(null) }
     val scope = rememberCoroutineScope()
@@ -52,6 +56,7 @@ class WeatherDetailsPresenter(
 
     return WeatherDetailsScreen.State(
       details = details,
+      settings = settings,
       isLoading = isLoading,
       error = error
     ) { event ->

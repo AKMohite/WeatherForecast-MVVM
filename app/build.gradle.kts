@@ -53,6 +53,8 @@ dependencies {
   implementation(project(":core:database"))
   implementation(project(":core:data"))
   implementation(project(":core:location"))
+  implementation(libs.androidx.datastore)
+  implementation(libs.protobuf.kotlin.lite)
   implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.material3)

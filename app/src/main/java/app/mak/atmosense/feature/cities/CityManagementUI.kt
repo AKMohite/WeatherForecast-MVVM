@@ -17,11 +17,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -44,12 +49,15 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import app.mak.atmosense.R
 import app.mak.atmosense.core.common.model.CityWeather
+import app.mak.atmosense.core.common.model.TemperatureUnit
+import app.mak.atmosense.core.common.model.UserSettings
 import app.mak.atmosense.ui.theme.AtmosenseTheme
 import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(screen = CityManagementScreen::class, scope = AppScope::class)
 @Composable
 internal fun CityManagementUI(
@@ -58,6 +66,23 @@ internal fun CityManagementUI(
 ) {
   val snackbarHostState = SnackbarHostState()
   Scaffold(
+    topBar = {
+      CenterAlignedTopAppBar(
+        title = { Text(stringResource(R.string.app_name)) },
+        actions = {
+          val eventSink = when (state) {
+            is CityManagementScreen.State.Empty -> state.eventSink
+            is CityManagementScreen.State.Success -> state.eventSink
+            else -> null
+          }
+          if (eventSink != null) {
+            IconButton(onClick = { eventSink(CityManagementScreen.Event.OpenSettings) }) {
+              Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
+            }
+          }
+        }
+      )
+    },
     snackbarHost = { SnackbarHost(snackbarHostState) },
     floatingActionButton = {
       if (state is CityManagementScreen.State.Success) {
@@ -94,6 +119,7 @@ internal fun CityManagementUI(
 
         is CityManagementScreen.State.Success -> WeatherForCitiesContent(
           cities = state.cities,
+          settings = state.settings,
           onCityClick = { id ->
             state.eventSink(CityManagementScreen.Event.Details(id))
           }
@@ -106,6 +132,7 @@ internal fun CityManagementUI(
 @Composable
 private fun WeatherForCitiesContent(
   cities: List<CityWeather>,
+  settings: UserSettings,
   onCityClick: (Long) -> Unit
 ) {
   LazyColumn(
@@ -115,6 +142,7 @@ private fun WeatherForCitiesContent(
     items(items = cities, key = { city -> city.cityId }) { city ->
       WeatherForCityUI(
         city = city,
+        settings = settings,
         onCityClick = onCityClick
       )
     }
@@ -124,6 +152,7 @@ private fun WeatherForCitiesContent(
 @Composable
 fun WeatherForCityUI(
   city: CityWeather,
+  settings: UserSettings,
   modifier: Modifier = Modifier,
   onCityClick: (Long) -> Unit
 ) {
@@ -157,12 +186,24 @@ fun WeatherForCityUI(
       }
       Spacer(Modifier.weight(1f))
       Text(
-        text = stringResource(R.string.temperature, city.temperature),
+        text = stringResource(
+          id = R.string.temperature_format,
+          city.temperature,
+          settings.temperatureUnit.symbol()
+        ),
         style = MaterialTheme.typography.titleMedium
       )
 
     }
   }
+}
+
+// TODO we can have units mapped to domain model instead of passing settings
+@Composable
+private fun TemperatureUnit.symbol(): String = when (this) {
+  TemperatureUnit.CELSIUS -> stringResource(R.string.unit_celsius)
+  TemperatureUnit.FAHRENHEIT -> stringResource(R.string.unit_fahrenheit)
+  TemperatureUnit.KELVIN -> stringResource(R.string.unit_kelvin)
 }
 
 private val locationPermissions = arrayOf(
@@ -261,10 +302,10 @@ private class CityManagementStateParameterProvider :
           weatherIcon = "app:://atmosense.com/img/01d@2x.png",
           weatherDescription = "Clear sky",
           fetchedBefore = "10 mins ago",
-          humidity = 10,
-          pressure = 10,
+          humidity = 10L,
+          pressure = 10.0,
           windSpeed = 10.0,
-          windDegrees = 10
+          windDegrees = 10L
         ),
         CityWeather(
           cityId = 2,
@@ -275,10 +316,10 @@ private class CityManagementStateParameterProvider :
           weatherIcon = "app:://atmosense.com/img/09d@2x.png",
           weatherDescription = "Light rain",
           fetchedBefore = "20 mins ago",
-          humidity = 10,
-          pressure = 10,
+          humidity = 10L,
+          pressure = 10.0,
           windSpeed = 10.0,
-          windDegrees = 10
+          windDegrees = 10L
         ),
         CityWeather(
           cityId = 3,
@@ -289,10 +330,10 @@ private class CityManagementStateParameterProvider :
           weatherIcon = "app:://atmosense.com/img/11d@2x.png",
           weatherDescription = "Thunderstorm",
           fetchedBefore = "5 mins ago",
-          humidity = 10,
-          pressure = 10,
+          humidity = 10L,
+          pressure = 10.0,
           windSpeed = 10.0,
-          windDegrees = 10
+          windDegrees = 10L
         )
       ),
       eventSink = {}

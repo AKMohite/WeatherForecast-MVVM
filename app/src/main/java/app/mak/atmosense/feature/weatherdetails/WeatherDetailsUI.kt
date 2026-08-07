@@ -37,6 +37,10 @@ import app.mak.atmosense.R
 import app.mak.atmosense.core.common.model.AppError
 import app.mak.atmosense.core.common.model.CityWeather
 import app.mak.atmosense.core.common.model.ForecastSlot
+import app.mak.atmosense.core.common.model.PressureUnit
+import app.mak.atmosense.core.common.model.TemperatureUnit
+import app.mak.atmosense.core.common.model.UserSettings
+import app.mak.atmosense.core.common.model.WindSpeedUnit
 import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
@@ -87,13 +91,13 @@ internal fun WeatherDetailsUI(
             }
           }
           item {
-            CurrentSection(details.currentWeather)
+            CurrentSection(details.currentWeather, state.settings)
           }
           item {
-            DetailsSection(details.currentWeather)
+            DetailsSection(details.currentWeather, state.settings)
           }
           item {
-            ForecastSection(details.forecastWeather)
+            ForecastSection(details.forecastWeather, state.settings)
           }
         }
       }
@@ -147,7 +151,7 @@ private fun ErrorDialog(
 }
 
 @Composable
-private fun ForecastSection(forecasts: List<ForecastSlot>) {
+private fun ForecastSection(forecasts: List<ForecastSlot>, settings: UserSettings) {
   Column(
     Modifier
       .fillMaxWidth()
@@ -176,7 +180,11 @@ private fun ForecastSection(forecasts: List<ForecastSlot>) {
               contentDescription = slot.condition?.description
             )
             Text(
-              text = stringResource(id = R.string.temperature, slot.temperature),
+              text = stringResource(
+                id = R.string.temperature_format,
+                slot.temperature,
+                settings.temperatureUnit.symbol()
+              ),
               modifier = Modifier.padding(8.dp),
             )
           }
@@ -187,7 +195,7 @@ private fun ForecastSection(forecasts: List<ForecastSlot>) {
 }
 
 @Composable
-private fun CurrentSection(weather: CityWeather?) {
+private fun CurrentSection(weather: CityWeather?, settings: UserSettings) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -197,11 +205,19 @@ private fun CurrentSection(weather: CityWeather?) {
   ) {
     Column {
       Text(
-        stringResource(id = R.string.temperature, weather?.temperature ?: 0.0),
+        stringResource(
+          id = R.string.temperature_format,
+          weather?.temperature ?: 0.0,
+          settings.temperatureUnit.symbol()
+        ),
         style = MaterialTheme.typography.displayLarge
       )
       Text(
-        stringResource(id = R.string.feels_like, weather?.feelsLike ?: 0.0),
+        stringResource(
+          id = R.string.feels_like_format,
+          weather?.feelsLike ?: 0.0,
+          settings.temperatureUnit.symbol()
+        ),
         style = MaterialTheme.typography.bodyMedium
       )
     }
@@ -222,7 +238,7 @@ private fun CurrentSection(weather: CityWeather?) {
 }
 
 @Composable
-private fun DetailsSection(weather: CityWeather?) {
+private fun DetailsSection(weather: CityWeather?, settings: UserSettings) {
   if (weather == null) return
   Card(
     modifier = Modifier
@@ -237,13 +253,27 @@ private fun DetailsSection(weather: CityWeather?) {
         modifier = Modifier.fillMaxWidth(),
       ) {
         DetailItem(stringResource(R.string.humidity, weather.humidity), Modifier.weight(1f))
-        DetailItem(stringResource(R.string.pressure, weather.pressure), Modifier.weight(1f))
+        DetailItem(
+          stringResource(
+            R.string.pressure_format,
+            weather.pressure,
+            settings.pressureUnit.symbol()
+          ),
+          Modifier.weight(1f)
+        )
       }
       Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
       ) {
-        DetailItem(stringResource(R.string.wind_speed, weather.windSpeed), Modifier.weight(1f))
+        DetailItem(
+          stringResource(
+            R.string.wind_speed_format,
+            weather.windSpeed,
+            settings.windSpeedUnit.symbol()
+          ),
+          Modifier.weight(1f)
+        )
         Row(
           modifier = Modifier.weight(1f),
           verticalAlignment = Alignment.CenterVertically
@@ -264,6 +294,33 @@ private fun DetailsSection(weather: CityWeather?) {
       }
     }
   }
+}
+
+// TODO maybe move to common UI to be accessible for all screens
+@Composable
+private fun TemperatureUnit.symbol(): String = when (this) {
+  TemperatureUnit.CELSIUS -> stringResource(R.string.unit_celsius)
+  TemperatureUnit.FAHRENHEIT -> stringResource(R.string.unit_fahrenheit)
+  TemperatureUnit.KELVIN -> stringResource(R.string.unit_kelvin)
+}
+
+@Composable
+private fun WindSpeedUnit.symbol(): String = when (this) {
+  WindSpeedUnit.METERS_PER_SECOND -> stringResource(R.string.unit_ms)
+  WindSpeedUnit.KILOMETERS_PER_HOUR -> stringResource(R.string.unit_kmh)
+  WindSpeedUnit.MILES_PER_HOUR -> stringResource(R.string.unit_mph)
+  WindSpeedUnit.KNOTS -> stringResource(R.string.unit_kn)
+  WindSpeedUnit.FEET_PER_SECOND -> stringResource(R.string.unit_fts)
+}
+
+@Composable
+private fun PressureUnit.symbol(): String = when (this) {
+  PressureUnit.HECTOPASCAL -> stringResource(R.string.unit_hpa)
+  PressureUnit.KILOPASCAL -> stringResource(R.string.unit_kpa)
+  PressureUnit.MILLIBAR -> stringResource(R.string.unit_mbar)
+  PressureUnit.ATMOSPHERE -> stringResource(R.string.unit_atm)
+  PressureUnit.MILLIMETERS_OF_MERCURY -> stringResource(R.string.unit_mmhg)
+  PressureUnit.INCHES_OF_MERCURY -> stringResource(R.string.unit_inhg)
 }
 
 @Composable

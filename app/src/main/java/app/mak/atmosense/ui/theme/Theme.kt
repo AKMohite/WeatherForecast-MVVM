@@ -10,6 +10,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+import app.mak.atmosense.core.common.model.AppTheme
+
 private val lightScheme = lightColorScheme(
   primary = primaryLight,
   onPrimary = onPrimaryLight,
@@ -240,13 +242,18 @@ private val highContrastDarkColorScheme = darkColorScheme(
 
 @Composable
 fun AtmosenseTheme(
-  darkTheme: Boolean = isSystemInDarkTheme(),
-  // Dynamic color is available on Android 12+
-  dynamicColor: Boolean = false,
+  theme: AppTheme = AppTheme.SYSTEM,
+  useDynamicColors: Boolean = false,
   content: @Composable () -> Unit
 ) {
+  val darkTheme = when (theme) {
+    AppTheme.SYSTEM -> isSystemInDarkTheme()
+    AppTheme.LIGHT -> false
+    AppTheme.DARK -> true
+  }
+
   val colorScheme = when {
-    dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+    useDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
       val context = LocalContext.current
       if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     }

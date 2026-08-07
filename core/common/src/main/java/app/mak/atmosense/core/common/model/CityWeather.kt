@@ -7,7 +7,7 @@ data class CityWeather(
   val temperature: Double,
   val feelsLike: Double,
   val humidity: Long,
-  val pressure: Long,
+  val pressure: Double,
   val windSpeed: Double,
   val windDegrees: Long,
   val weatherIcon: String,

@@ -7,8 +7,23 @@ import app.mak.atmosense.core.common.model.LocationCoordinate
 import app.mak.atmosense.core.common.model.SearchCity
 import app.mak.atmosense.core.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeWeatherRepository : WeatherRepository {
+  var currentWeather: CityWeather? = null
+    set(value) {
+      field = value
+      currentWeatherFlow.value = value
+    }
+  private val currentWeatherFlow = MutableStateFlow<CityWeather?>(null)
+
+  var forecastWeather: List<ForecastSlot> = emptyList()
+    set(value) {
+      field = value
+      forecastWeatherFlow.value = value
+    }
+  private val forecastWeatherFlow = MutableStateFlow<List<ForecastSlot>>(emptyList())
+
   var fetchResult: AppResult<Unit> = AppResult.Success(Unit)
   var fetchForecastResult: AppResult<Unit> = AppResult.Success(Unit)
 
@@ -56,6 +71,8 @@ class FakeWeatherRepository : WeatherRepository {
   }
 
   override fun observeCitiesWeather(): Flow<List<CityWeather>> = TODO()
-  override fun observeCityForecastWeather(cityId: Long): Flow<List<ForecastSlot>> = TODO()
-  override fun observeCityCurrentWeather(cityId: Long): Flow<CityWeather?> = TODO()
+  override fun observeCityForecastWeather(cityId: Long): Flow<List<ForecastSlot>> =
+    forecastWeatherFlow
+
+  override fun observeCityCurrentWeather(cityId: Long): Flow<CityWeather?> = currentWeatherFlow
 }

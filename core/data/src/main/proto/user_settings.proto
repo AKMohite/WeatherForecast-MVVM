@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_package = "app.mak.atmosense.core.data";
+option java_multiple_files = true;
+
+message UserSettingsProto {
+  enum TemperatureUnitProto {
+    TEMPERATURE_UNIT_CELSIUS = 0;
+    TEMPERATURE_UNIT_FAHRENHEIT = 1;
+    TEMPERATURE_UNIT_KELVIN = 2;
+  }
+  enum WindSpeedUnitProto {
+    WIND_SPEED_UNIT_METERS_PER_SECOND = 0;
+    WIND_SPEED_UNIT_KILOMETERS_PER_HOUR = 1;
+    WIND_SPEED_UNIT_MILES_PER_HOUR = 2;
+    WIND_SPEED_UNIT_KNOTS = 3;
+    WIND_SPEED_UNIT_FEET_PER_SECOND = 4;
+  }
+  enum PressureUnitProto {
+    PRESSURE_UNIT_HECTOPASCAL = 0;
+    PRESSURE_UNIT_KILOPASCAL = 1;
+    PRESSURE_UNIT_MILLIBAR = 2;
+    PRESSURE_UNIT_ATMOSPHERE = 3;
+    PRESSURE_UNIT_MILLIMETERS_OF_MERCURY = 4;
+    PRESSURE_UNIT_INCHES_OF_MERCURY = 5;
+  }
+  enum DistanceUnitProto {
+    DISTANCE_UNIT_METERS = 0;
+    DISTANCE_UNIT_KILOMETERS = 1;
+    DISTANCE_UNIT_MILES = 2;
+    DISTANCE_UNIT_NAUTICAL_MILES = 3;
+    DISTANCE_UNIT_FEET = 4;
+  }
+  enum PrecipitationUnitProto {
+    PRECIPITATION_UNIT_MILLIMETERS = 0;
+    PRECIPITATION_UNIT_CENTIMETERS = 1;
+    PRECIPITATION_UNIT_INCHES = 2;
+    PRECIPITATION_UNIT_LITERS_PER_SQUARE_METER = 3;
+  }
+  enum AppThemeProto {
+    APP_THEME_SYSTEM = 0;
+    APP_THEME_LIGHT = 1;
+    APP_THEME_DARK = 2;
+  }
+
+  TemperatureUnitProto temperature_unit = 1;
+  WindSpeedUnitProto wind_speed_unit = 2;
+  PressureUnitProto pressure_unit = 3;
+  DistanceUnitProto distance_unit = 4;
+  PrecipitationUnitProto precipitation_unit = 5;
+  AppThemeProto app_theme = 6;
+  bool use_dynamic_colors = 7;
+}

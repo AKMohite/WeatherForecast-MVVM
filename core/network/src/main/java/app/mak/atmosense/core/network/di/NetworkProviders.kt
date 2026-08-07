@@ -72,7 +72,7 @@ interface NetworkProviders {
   }
 
   private suspend fun handleKtorExceptions(exception: Throwable): Throwable? {
-//        todo check for ktor exceptions instead java
+//        TODO check for ktor exceptions instead java
     return when (exception) {
       is ClientRequestException -> {
 //        val exceptionResponse = exception.response

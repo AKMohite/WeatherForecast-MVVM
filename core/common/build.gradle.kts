@@ -23,4 +23,5 @@ android {
 dependencies {
   implementation(libs.javax.inject)
   implementation(libs.kotlinx.datetime)
+  testImplementation(libs.junit)
 }
