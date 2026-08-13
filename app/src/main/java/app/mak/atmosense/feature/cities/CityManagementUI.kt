@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -137,7 +138,9 @@ private fun WeatherForCitiesContent(
 ) {
   LazyColumn(
     modifier = Modifier
-      .fillMaxSize()
+      .fillMaxSize(),
+    contentPadding = PaddingValues(8.dp),
+    verticalArrangement = Arrangement.spacedBy(4.dp)
   ) {
     items(items = cities, key = { city -> city.cityId }) { city ->
       WeatherForCityUI(
@@ -158,8 +161,7 @@ fun WeatherForCityUI(
 ) {
   Card(
     modifier = modifier
-      .fillMaxWidth()
-      .padding(8.dp),
+      .fillMaxWidth(),
     onClick = { onCityClick(city.cityId) }
   ) {
     Row(

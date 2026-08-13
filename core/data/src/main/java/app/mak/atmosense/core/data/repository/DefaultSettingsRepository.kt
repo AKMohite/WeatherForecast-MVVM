@@ -72,7 +72,9 @@ class DefaultSettingsRepository(
     WindSpeedUnitProto.WIND_SPEED_UNIT_MILES_PER_HOUR -> WindSpeedUnit.MILES_PER_HOUR
     WindSpeedUnitProto.WIND_SPEED_UNIT_KNOTS -> WindSpeedUnit.KNOTS
     WindSpeedUnitProto.WIND_SPEED_UNIT_FEET_PER_SECOND -> WindSpeedUnit.FEET_PER_SECOND
-    else -> WindSpeedUnit.KILOMETERS_PER_HOUR
+    WindSpeedUnitProto.WIND_SPEED_UNIT_METERS_PER_SECOND -> WindSpeedUnit.METERS_PER_SECOND
+    WindSpeedUnitProto.WIND_SPEED_UNIT_KILOMETERS_PER_HOUR -> WindSpeedUnit.KILOMETERS_PER_HOUR
+    WindSpeedUnitProto.UNRECOGNIZED -> WindSpeedUnit.KILOMETERS_PER_HOUR
   }
 
   private fun WindSpeedUnit.toProto(): WindSpeedUnitProto = when (this) {
